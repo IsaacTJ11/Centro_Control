@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Centro de Control - Presa Huinco{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/embalses.css') }}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/reportes.css') }}"> -->
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/embalses.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='js/reportes.js') }}"></script> -->
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-title">
+    <i class="fas fa-bridge-water"></i>
+    Presa Huinco
+</div>
+
+
+<div class="two-column">
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-tachometer-alt"></i>
+            Valores Actuales <span id="hora-actuales"></span>
+        </div>
+        <div class="card-body">
+            <div class="equipment-section">
+                <div class="metric-row">
+                    <span class="metric-label">Caudal Entrada:</span>
+                    <input id="val-rio" type="text" class="metric-value" readonly aria-label="Caudal del río">
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Caudal Callah.:</span>
+                    <input id="val-calla" type="text" class="metric-value" readonly aria-label="Caudal de Callahuanca">
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Caudal al río:</span>
+                    <input id="val-desc" type="text" class="metric-value" readonly aria-label="Caudal de descarga">
+                </div>
+                <!-- Botones de navegación -->
+                <div class="metric-row">
+                    <button class="btn btn-primary" onclick="window.location.href='/fondo_huinco'">
+                        <span class="material-symbols-outlined">window_closed</span> Regulación Comp. Fondo
+                    </button>
+                </div>
+                <div class="metric-row">
+                    <button class="btn btn-primary" onclick="window.location.href='/bypass_huinco'">
+                        <span class="material-symbols-outlined">window_closed</span>  Regulación Comp. Bypass
+                    </button>
+                </div>
+                <div class="metric-row">
+                    <button class="btn btn-primary" onclick="window.location.href='/despacho'">
+                        <i class="fas fa-file-invoice"></i> Ver Despacho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            Nivel Presa Huinco
+        </div>
+        <div class="card-body">
+            <div id="chart-nivel-huinco"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="one-column">
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            Acciones Recomendadas
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="actions-table" id="daily-report-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="daily-report-tbody">
+                        <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+{% endblock %}

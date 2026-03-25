@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Centro de Control - Error de Conexión{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina500.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pagina500.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="error-conexion-container">
+    <div class="error-conexion-content">
+
+        <h1 class="error-conexion-title">
+            Error de Conexión
+        </h1>
+
+        <!-- <span class="error-code-badge">Error {{ error_code or '503' }}</span> -->
+
+        <div class="error-icon-wrapper">
+            <i class="fas fa-database icon-main"></i>
+            <i class="fas fa-times-circle icon-badge"></i>
+        </div>
+
+        <p class="error-conexion-text">
+            No se pudo establecer conexión con la base de datos o con el servidor de datos.<br>
+            El servicio puede estar temporalmente no disponible.
+        </p>
+
+        <!-- {% if error_detail %}
+        <div class="error-details-box">
+            <span class="detail-label"><i class="fas fa-info-circle"></i>&nbsp; Detalle técnico:</span>
+            <code>{{ error_detail }}</code>
+        </div>
+        {% endif %} -->
+
+        <div class="error-actions">
+            <button class="btn-reintentar" onclick="reintentarConexion(this)">
+                <i class="fas fa-sync-alt"></i>
+                Reintentar
+            </button>
+            <a href="/" class="btn-volver">
+                <i class="fas fa-home"></i>
+                Volver al Inicio
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
