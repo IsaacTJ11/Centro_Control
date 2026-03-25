@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <title>{% block title %}Centro de Control{% endblock %}</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block styles %}{% endblock %}
+
+    <script>
+        (function () {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-pre-collapsed');
+            }
+        })();
+
+        (function () {
+            const path = window.location.pathname;
+
+            const routeMap = {
+                '/huinco':          { submenu: 'embalse',            page: '/huinco' },
+                '/tulumayo':        { submenu: 'embalse',            page: '/tulumayo' },
+                '/matucana':        { submenu: 'embalse',            page: '/matucana' },
+                '/fondo_huinco':    { submenu: 'regulacion',         page: '/fondo_huinco' },
+                '/bypass_huinco':   { submenu: 'regulacion',         page: '/bypass_huinco' },
+                '/toma_moyopampa':  { submenu: 'regulacion',         page: '/toma_moyopampa' },
+                '/costo-marginal':  { submenu: 'coes',               page: '/costo-marginal' },
+                '/despacho':        { submenu: 'coes',               page: '/despacho' },
+                '/rsf':             { submenu: 'coes',               page: '/rsf' },
+                '/rpf':             { submenu: 'coes',               page: '/rpf' },
+                '/indis-semanal':   { submenu: 'indisponibilidades', page: '/indis-semanal' },
+                '/indis-diaria':    { submenu: 'indisponibilidades', page: '/indis-diaria' },
+                '/reportes_rer':    { submenu: 'reportes-rer',       page: '/reportes_rer' },
+                '/recurso-diario':  { submenu: 'reportes-rer',       page: '/recurso-diario' },
+                '/vertimiento':     { submenu: 'reportes-rer',       page: '/vertimiento' },
+                '/estado-hydro':    { submenu: 'reportes-hydro',     page: '/estado-hydro' },
+            };
+
+            const match = routeMap[path];
+            if (!match) return;
+
+            // Guardar en sessionStorage para que main.js sepa qué limpiar
+            sessionStorage.setItem('pre_active_submenu', match.submenu);
+            sessionStorage.setItem('pre_active_page', match.page);
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const parentItem = document.querySelector(`[data-submenu="${match.submenu}"]`);
+                const submenuEl  = document.getElementById(`${match.submenu}-submenu`);
+                const childItem  = document.querySelector(`.submenu-item[data-page="${match.page}"]`);
+
+                if (parentItem) parentItem.classList.add('pre-active-parent');
+                if (submenuEl)  submenuEl.classList.add('pre-active-submenu');
+                if (childItem)  childItem.classList.add('pre-active-child');
+            }, { once: true });
+        })();
+    </script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo_Orygen_blanco.png') }}" alt="Logo Orygen">
+            <p>Centro de Control</p>
+        </div>
+        <!--         <div class="user-info">
+            <i class="fas fa-bell"></i>
+            <i class="fas fa-user-circle"></i>
+            <span>Usuario Admin</span>
+        </div> -->
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-item" data-page="/">
+            <i class="fas fa-home"></i>
+            <span class="menu-text">Home</span>
+        </div>
+
+        <div class="sidebar-item" data-submenu="embalse">
+            <i class="fas fa-bridge-water"></i>
+            <span class="menu-text">Embalse y Desembalse</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </div>
+        <div class="submenu" id="embalse-submenu">
+            <div class="submenu-item" data-page="/huinco">
+                <span class="menu-text">Presa Huinco</span>
+            </div>
+            <div class="submenu-item" data-page="/tulumayo">
+                <span class="menu-text">Presa Tulumayo</span>
+            </div>
+            <div class="submenu-item" data-page="/matucana">
+                <span class="menu-text">Pulmón Matucana</span>
+            </div>
+        </div>
+
+        <div class="sidebar-item" data-submenu="regulacion">
+            <span class="material-symbols-outlined">window_closed</span>
+            <span class="menu-text">Regulación Compuertas</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </div>
+        <div class="submenu" id="regulacion-submenu">
+            <div class="submenu-item" data-page="/fondo_huinco">
+                <span class="menu-text">Fondo Huinco</span>
+            </div>
+            <div class="submenu-item" data-page="/bypass_huinco">
+                <span class="menu-text">Bypass Huinco</span>
+            </div>
+            <div class="submenu-item" data-page="/toma_moyopampa">
+                <span class="menu-text">Toma Moyopampa</span>
+            </div>
+        </div>
+
+        <div class="sidebar-item" data-submenu="coes">
+            <i class="fas fa-chart-line"></i>
+            <span class="menu-text">COES</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </div>
+        <div class="submenu" id="coes-submenu">
+            <div class="submenu-item" data-page="/costo-marginal">
+                <span class="menu-text">Costo marginal</span>
+            </div>
+            <div class="submenu-item" data-page="/despacho">
+                <span class="menu-text">Despacho diario</span>
+            </div>
+            <div class="submenu-item" data-page="/rsf">
+                <span class="menu-text">RSF diario</span>
+            </div>
+            <div class="submenu-item" data-page="/rpf">
+                <span class="menu-text">RPF límites</span>
+            </div>
+        </div>
+
+        <div class="sidebar-item" data-submenu="indisponibilidades">
+            <i class="fas fa-calendar-times"></i>
+            <span class="menu-text">Indisponibilidades</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </div>
+        <div class="submenu" id="indisponibilidades-submenu">
+            <div class="submenu-item" data-page="/indis-semanal">
+                <span class="menu-text">Semanal</span>
+            </div>
+            <div class="submenu-item" data-page="/indis-diaria">
+                <span class="menu-text">Diaria</span>
+            </div>
+        </div>
+
+        <div class="sidebar-item" data-submenu="reportes-rer">
+            <span class="material-symbols-outlined">energy_savings_leaf</span>
+            <span class="menu-text">Reportes RER</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </div>
+        <div class="submenu" id="reportes-rer-submenu">
+            <div class="submenu-item" data-page="/reportes_rer">
+                <span class="menu-text">Estado equipos</span>
+            </div>
+            <div class="submenu-item" data-page="/recurso-diario">
+                <span class="menu-text">Recurso diario</span>
+            </div>
+            <div class="submenu-item" data-page="/vertimiento">
+                <span class="menu-text">Vertimiento</span>
+            </div>
+        </div>
+
+        <div class="sidebar-item" data-submenu="reportes-hydro">
+            <span class="material-symbols-outlined">water_ec</span>
+            <span class="menu-text">Reportes Hydro</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </div>
+        <div class="submenu" id="reportes-hydro-submenu">
+            <div class="submenu-item" data-page="/estado-hydro">
+                <span class="menu-text">Estado Unidades Hydro</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>
+            &nbsp;© 2025 <span>Sistema Unificado Control Room</span>
+            <i class="fas fa-bolt"></i>
+            <span class="author">ITJ</span>
+        </p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+
+</body>
+
+</html>
