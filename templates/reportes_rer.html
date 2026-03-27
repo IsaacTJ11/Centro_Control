@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Centro de Control - Equipos RER{% endblock %}
@@ -419,4 +420,356 @@ function sendDailyReport() {
     // Aquí se implementaría la lógica para enviar el reporte diario
 }
 </script>
+=======
+{% extends "base.html" %}
+
+{% block title %}Centro de Control - Equipos RER{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reportes.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reportes.js') }}"></script>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-title">
+    <span class="material-symbols-outlined">energy_savings_leaf</span>
+    Estado de aerogeneradores e inversores
+</div>
+
+<div class="two-column">
+    <div class="status-card">
+        <div class="card-header">
+            <span class="material-symbols-outlined">wind_power</span>
+            Tecnología Eólica
+            <button class="btn-actualizar" onclick="ejecutarActualizarWind()" title="Actualizar datos">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+        </div>
+
+        <div class="card-body">
+            <!-- Sección de Filtros -->
+            <div class="equipment-section">
+                <div class="section-header">
+                    <h4>Filtros:</h4>
+                    <div class="filters-controls">
+                        <button class="filter-tipo-btn active" data-tipo="FALLA" onclick="toggleTipoFilter(this)">
+                            <span class="status-indicator status-FALLA"></span>
+                            <span class="filter-tipo-text">FALLA</span>
+                        </button>
+                        <button class="filter-tipo-btn active" data-tipo="PAUSA_STOP" onclick="toggleTipoFilter(this)">
+                            <span class="status-indicator status-PAUSA"></span>
+                            <span class="filter-tipo-text">PAUSA/STOP</span>
+                        </button>
+                        <button class="filter-tipo-btn active" data-tipo="MANT" onclick="toggleTipoFilter(this)">
+                            <span class="status-indicator status-MANT"></span>
+                            <span class="filter-tipo-text">MANT</span>
+                        </button>
+                    </div>
+                    <button class="view-state-button state-activos" id="view-state-btn" onclick="cycleViewState()">
+                        Activos
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Wayra I -->
+            <div class="equipment-section">
+                <div class="section-header">
+                    <h4>Wayra I:</h4>
+                </div>
+                <div class="equipment-list" id="aerogeneradores-wayra-i">
+                    {% for aero in aerogeneradores_falla %}
+                    {% if aero.nombre.replace('*', '').replace('WTG', '')|int <= 42 %}
+                    <div class="equipment-item {{ aero.status }}" 
+                        data-id="{{ aero.id }}" 
+                        data-circuito="{{ aero.circuito }}"
+                        data-tipo="{{ aero.tipo }}"
+                        data-fecha-fin="{{ aero.fecha_fin }}"
+                        data-tipo-group="{% if aero.tipo in ['PAUSA', 'STOP'] %}PAUSA_STOP{% else %}{{ aero.tipo }}{% endif %}"
+                        {% if aero.get('is_unified') %}
+                        data-unified="true"
+                        data-components='{{ aero.component_records | tojson }}'
+                        {% endif %}>
+                        <span class="status-indicator status-{{ aero.tipo }}"></span>
+                        <span class="equipment-name">{{ aero.nombre }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_inicio }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_fin }}</span>
+                        <span class="equipment-time">({{ aero.tiempo }})</span>
+                        <span class="equipment-report">{{ aero.reporte304 }}</span>
+                        <span class="equipment-report">{{ aero.reporte264 }}</span>
+                        <span class="equipment-report j5-badge {% if aero.reporteJ5 == 'J5 ✓' %}j5-ok{% elif aero.reporteJ5 == 'J5 ✗' %}j5-pending{% endif %}">{{ aero.reporteJ5 }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% for aero in aerogeneradores_mantenimiento %}
+                    {% if aero.nombre.replace('*', '').replace('WTG', '')|int <= 42 %}
+                    <div class="equipment-item {{ aero.status }}" 
+                        data-id="{{ aero.id }}" 
+                        data-circuito="{{ aero.circuito }}"
+                        data-tipo="{{ aero.tipo }}"
+                        data-fecha-fin="{{ aero.fecha_fin }}"
+                        data-tipo-group="{{ aero.tipo }}">
+                        <span class="status-indicator status-{{ aero.tipo }}"></span>
+                        <span class="equipment-name">{{ aero.nombre }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_inicio }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_fin }}</span>
+                        <span class="equipment-time">({{ aero.tiempo }})</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Wayra Extensión -->
+            <div class="equipment-section">
+                <div class="section-header">
+                    <h4>Wayra Extensión:</h4>
+                </div>
+                <div class="equipment-list" id="aerogeneradores-wayra-ext">
+                    {% for aero in aerogeneradores_falla %}
+                    {% if aero.nombre.replace('*', '').replace('WTG', '')|int > 42 %}
+                    <div class="equipment-item {{ aero.status }}" 
+                        data-id="{{ aero.id }}" 
+                        data-circuito="{{ aero.circuito }}"
+                        data-tipo="{{ aero.tipo }}"
+                        data-fecha-fin="{{ aero.fecha_fin }}"
+                        data-tipo-group="{% if aero.tipo in ['PAUSA', 'STOP'] %}PAUSA_STOP{% else %}{{ aero.tipo }}{% endif %}"
+                        {% if aero.get('is_unified') %}
+                        data-unified="true"
+                        data-components='{{ aero.component_records | tojson }}'
+                        {% endif %}>
+                        <span class="status-indicator status-{{ aero.tipo }}"></span>
+                        <span class="equipment-name">{{ aero.nombre }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_inicio }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_fin }}</span>
+                        <span class="equipment-time">({{ aero.tiempo }})</span>
+                        <span class="equipment-report">{{ aero.reporte304 }}</span>
+                        <span class="equipment-report">{{ aero.reporte264 }}</span>
+                        <span class="equipment-report j5-badge {% if aero.reporteJ5 == 'J5 ✓' %}j5-ok{% elif aero.reporteJ5 == 'J5 ✗' %}j5-pending{% endif %}">{{ aero.reporteJ5 }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% for aero in aerogeneradores_mantenimiento %}
+                    {% if aero.nombre.replace('*', '').replace('WTG', '')|int > 42 %}
+                    <div class="equipment-item {{ aero.status }}" 
+                        data-id="{{ aero.id }}" 
+                        data-circuito="{{ aero.circuito }}"
+                        data-tipo="{{ aero.tipo }}"
+                        data-fecha-fin="{{ aero.fecha_fin }}"
+                        data-tipo-group="{{ aero.tipo }}">
+                        <span class="status-indicator status-{{ aero.tipo }}"></span>
+                        <span class="equipment-name">{{ aero.nombre }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_inicio }}</span>
+                        <span class="equipment-fecha">{{ aero.fecha_fin }}</span>
+                        <span class="equipment-time">({{ aero.tiempo }})</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>        
+    </div>
+
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-solar-panel"></i>
+            Tecnología Solar
+        </div>
+        <div class="card-body">
+            <div class="equipment-section">
+                <h4>Inversores en Falla:</h4>
+                <!-- <div class="equipment-list">
+                    <div class="equipment-item falla">
+                        <span class="status-indicator status-falla"></span>
+                        <span class="equipment-name">R 10.4</span>
+                        <span class="equipment-time">(>24h)</span>
+                        <span class="equipment-report">PR-264 ✓</span>
+                    </div>
+                    <div class="equipment-item falla">
+                        <span class="status-indicator status-falla"></span>
+                        <span class="equipment-name">C 10.4</span>
+                        <span class="equipment-time">(>24h)</span>
+                        <span class="equipment-report">PR-264 ✓</span>
+                    </div>
+                    <div class="equipment-item falla">
+                        <span class="status-indicator status-falla"></span>
+                        <span class="equipment-name">C 10.4</span>
+                        <span class="equipment-time">(18h)</span>
+                        <span class="equipment-report">Pendiente</span>
+                    </div>
+                </div> -->
+            </div>
+            
+            <div class="equipment-section">
+                <h4>Inversores en Mantenimiento:</h4>
+                <!-- <div class="equipment-list">
+                    <div class="equipment-item ok">
+                        <span class="status-indicator status-ok"></span>
+                        <span class="equipment-name">R 10.4</span>
+                        <span class="equipment-status">Programado</span>
+                    </div>
+                    <div class="equipment-item ok">
+                        <span class="status-indicator status-ok"></span>
+                        <span class="equipment-name">C 0.4</span>
+                        <span class="equipment-status">Programado</span>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- <div class="actions-card">
+    <div class="card-header">
+        <i class="fas fa-tasks"></i>
+        Acciones Requeridas
+    </div>
+    <div class="card-body">
+        <div class="actions-grid">
+            <div class="action-section">
+                <h4>Informes PR-304 Pendientes:</h4>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="status-indicator status-warning"></span>
+                        <span class="action-text">Inversor S-015 - Falla detectada hace 18h</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="status-indicator status-warning"></span>
+                        <span class="action-text">Aerogen. E-012 - Falla detectada hace 16h</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="generatePR304()">
+                    <i class="fas fa-file-alt"></i>
+                    Generar y Enviar PR-304
+                </button>
+            </div>
+            
+            <div class="action-section">
+                <h4>Contingencias PR-264 Pendientes:</h4>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="status-indicator status-error"></span>
+                        <span class="action-text">2 equipos con >24h en falla</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="sendPR264()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Enviar Declaración PR-264
+                </button>
+            </div>
+            
+            <div class="action-section">
+                <h4>Reporte Diario (00:00h):</h4>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="status-indicator status-ok"></span>
+                        <span class="action-text">Reporte del 03/06 enviado</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="status-indicator status-warning"></span>
+                        <span class="action-text">Reporte del 04/06 pendiente</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="sendDailyReport()">
+                    <i class="fas fa-calendar-check"></i>
+                    Enviar Reporte Diario
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="summary-table">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Resumen de Estado de Equipos (Reporte Diario)
+        <button class="toggle-table-button" onclick="toggleTableVisibility()" title="Mostrar/Ocultar tabla">
+            <i class="fas fa-chevron-down"></i>
+        </button>
+    </div>
+    <div class="table-wrapper hidden">
+        <div class="table-container">
+            <table class="equipment-table" id="daily-report-table">
+                <thead>
+                    <tr>
+                        <th>Central</th>
+                        <th>Aero/Inversor</th>
+                        <th>Circuito</th>
+                        <th>Hora Inicio</th>
+                        <th>Descripción</th>
+                        <th>Estado Actual</th>
+                        <th>Hora Fin</th>
+                    </tr>
+                </thead>
+                <tbody id="daily-report-tbody">
+                    <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadDailyReportData() {
+    fetch('/api/daily-report-data')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                populateDailyReportTable(data.data);
+            } else {
+                console.error('Error al cargar datos:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error de conexión:', error);
+        });
+}
+
+function populateDailyReportTable(data) {
+    const tbody = document.getElementById('daily-report-tbody');
+    tbody.innerHTML = '';
+    
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px; color: #999;">No hay registros para mostrar</td></tr>';
+        return;
+    }
+    
+    data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${row.central}</td>
+            <td>${row.aero}</td>
+            <td>${row.circuito}</td>
+            <td>${row.hora_inicio}</td>
+            <td>${row.descripcion}</td>
+            <td><span class="status ${row.estado_clase}">${row.estado_actual}</span></td>
+            <td>${row.hora_fin}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+</script>
+
+<script>
+function generatePR304() {
+    alert('Generando informe PR-304 para equipos pendientes...');
+    // Aquí se implementaría la lógica para generar el informe
+}
+
+function sendPR264() {
+    alert('Enviando declaración de contingencia PR-264...');
+    // Aquí se implementaría la lógica para enviar la declaración
+}
+
+function sendDailyReport() {
+    alert('Enviando reporte diario...');
+    // Aquí se implementaría la lógica para enviar el reporte diario
+}
+</script>
+>>>>>>> d8ad0b27ff8876c3ce36c1e1edf5e1db272e0c05
 {% endblock %}

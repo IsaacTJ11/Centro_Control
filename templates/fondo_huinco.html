@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Regulación - Compuerta de Fondo Huinco{% endblock %}
@@ -88,4 +89,96 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+=======
+{% extends "base.html" %}
+
+{% block title %}Regulación - Compuerta de Fondo Huinco{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/compuertas.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/compuertas.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <i class="fas fa-gears"></i>
+    Regulación Compuerta de Fondo - Huinco
+</div>
+
+<div class="two-column">
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-sliders-h"></i>
+            Control de Apertura <span id="hora-actuales"></span>
+        </div>
+        <div class="card-body">
+            <div class="equipment-section">
+                <div class="metric-row">
+                    <span class="metric-label">Apertura Actual:</span>
+                    <input id="val-apertura" type="text" class="metric-value" readonly aria-label="Apertura actual">
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Caudal Calculado:</span>
+                    <input id="val-caudal-comp" type="text" class="metric-value" readonly aria-label="Caudal por compuerta">
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Nivel de Embalse:</span>
+                    <input id="val-nivel-ref" type="text" class="metric-value" readonly aria-label="Nivel de referencia">
+                </div>
+                
+                <div class="metric-row">
+                    <button class="btn btn-primary" onclick="window.location.href='/huinco'">
+                        <i class="fas fa-arrow-left"></i> Volver a Presa Huinco
+                    </button>
+                </div>
+                <div class="metric-row">
+                    <button class="btn btn-primary" id="btn-actualizar-manual">
+                        <i class="fas fa-sync"></i> Forzar Actualización
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            Histórico de Apertura vs Caudal
+        </div>
+        <div class="card-body">
+            <div id="chart-compuerta-fondo"></div>
+        </div>
+    </div>
+</div>
+
+<div class="one-column">
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-history"></i>
+            Registro de Movimientos Recientes
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="actions-table">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Apertura (%)</th>
+                            <th>Caudal (m³/s)</th>
+                            <th>Usuario/Sistema</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registro-movimientos-tbody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+>>>>>>> d8ad0b27ff8876c3ce36c1e1edf5e1db272e0c05
 {% endblock %}

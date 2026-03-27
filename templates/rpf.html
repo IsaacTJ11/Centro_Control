@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Centro de Control - Presa Huinco{% endblock %}
@@ -210,4 +211,218 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+=======
+{% extends "base.html" %}
+
+{% block title %}Centro de Control - Presa Huinco{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tablas.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/rpf.js') }}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-title">
+    <i class="fas fa-up-down"></i>
+    Regulación Primaria de Frecuencia
+</div>
+
+<div class="one-column">
+    <div class="status-card">
+        <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            Límites de RPF
+        </div>
+        <div class="card-body">
+            <div class="metric-row">
+                <label for="val-rpf-actual" class="metric-label">RPF Actual:</label>
+                <input id="val-rpf-actual" type="number" step="0.05" class="metric-value" value="">
+                <span class="metric-label">%</span>
+            </div>
+
+            <div class="table-container">
+                <table class="actions-table" id="rpf-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" colspan="2" class="bg-orange-header">Central</th>
+                            <th colspan="4" class="first-unit-head">Huinco</th>
+                            <th colspan="2" class="first-unit-head">Matucana</th>
+                            <th colspan="4" class="first-unit-head">Callahuanca</th>
+                            <th colspan="3" class="first-unit-head">Moyopampa</th>
+                            <th colspan="2" class="first-unit-head">Huampani</th>
+                            <th colspan="2" class="first-unit-head">HER</th>
+                            <th colspan="2" class="first-unit-head">Chimay</th>
+                            <th class="first-unit-head">Yanango</th>
+                        </tr>
+                        <tr>
+                            <th class="first-unit-head">U1</th><th>U2</th><th>U3</th><th>U4</th>
+                            <th class="first-unit-head">U1</th><th>U2</th>
+                            <th class="first-unit-head">U1</th><th>U2</th><th>U3</th><th>U4</th>
+                            <th class="first-unit-head">U1</th><th>U2</th><th>U3</th>
+                            <th class="first-unit-head">U1</th><th>U2</th>
+                            <th class="first-unit-head">U3</th><th>U4</th>
+                            <th class="first-unit-head">U1</th><th>U2</th>
+                            <th class="first-unit-head">U1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2" class="bg-orange-header">Sólidos máx. (g/l)</td>
+                            <td colspan="4" class="first-unit-body" >4</td>
+                            <td colspan="2" class="first-unit-body" >5</td>
+                            <td colspan="4" class="first-unit-body" >4</td>
+                            <td colspan="3" class="first-unit-body" >4</td>
+                            <td colspan="2" class="first-unit-body" >6</td>
+                            <td colspan="2" class="first-unit-body" >4</td>
+                            <td colspan="2" class="first-unit-body" >2</td>
+                            <td class="first-unit-body" >6</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="bg-orange-header">Rebose máx. (m3/s)</td>
+                            <td colspan="4" class="first-unit-body" >--</td>
+                            <td colspan="2" class="first-unit-body" >--</td>
+                            <td colspan="4" class="first-unit-body" >6</td>
+                            <td colspan="3" class="first-unit-body" >2</td>
+                            <td colspan="2" class="first-unit-body" >2</td>
+                            <td colspan="2" class="first-unit-body" >--</td>
+                            <td colspan="2" class="first-unit-body" >--</td>
+                            <td class="first-unit-body" >--</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" class="bg-orange-header">Potencia Nominal (MW)</td>
+                            <td class="bg-orange-header">Mín</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="h1">21.94</td>
+                            <td class="p-nom-val" data-type="min" data-unit="h2">21.93</td>
+                            <td class="p-nom-val" data-type="min" data-unit="h3">21.95</td>
+                            <td class="p-nom-val" data-type="min" data-unit="h4">21.94</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="m1">20.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="m2">20.0</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="c1">8.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="c2">8.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="c3">8.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="c4">15.0</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="my1">8.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="my2">8.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="my3">8.0</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="hm1">6.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="hm2">6.0</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="hr3">0.3</td>
+                            <td class="p-nom-val" data-type="min" data-unit="hr4">0.3</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="ch1">65.0</td>
+                            <td class="p-nom-val" data-type="min" data-unit="ch2">30.0</td>
+                            <td class="p-nom-val first-unit-body" data-type="min" data-unit="y1">5.0</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-orange-header">Máx</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="h1">69.53</td>
+                            <td class="p-nom-val" data-type="max" data-unit="h2">69.11</td>
+                            <td class="p-nom-val" data-type="max" data-unit="h3">69.914</td>
+                            <td class="p-nom-val" data-type="max" data-unit="h4">69.34</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="m1">68.555</td>
+                            <td class="p-nom-val" data-type="max" data-unit="m2">68.466</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="c1">16.76</td>
+                            <td class="p-nom-val" data-type="max" data-unit="c2">16.55</td>
+                            <td class="p-nom-val" data-type="max" data-unit="c3">16.59</td>
+                            <td class="p-nom-val" data-type="max" data-unit="c4">35.0</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="my1">24.8</td>
+                            <td class="p-nom-val" data-type="max" data-unit="my2">24.8</td>
+                            <td class="p-nom-val" data-type="max" data-unit="my3">22.75</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="hm1">15.615</td>
+                            <td class="p-nom-val" data-type="max" data-unit="hm2">15.235</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="hr3">0.4</td>
+                            <td class="p-nom-val" data-type="max" data-unit="hr4">0.4</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="ch1">77.162</td>
+                            <td class="p-nom-val" data-type="max" data-unit="ch2">78.59</td>
+                            <td class="p-nom-val first-unit-body" data-type="max" data-unit="y1">43.11</td>
+                        </tr>
+
+                        <tr class="rpf-calculate">
+                            <td rowspan="2" class="bg-orange-header">Potencia RPF (MW)</td>
+                            <td class="bg-orange-header">Mín</td>
+                            <td class="first-unit-body" id="calc-min-h1"></td><td id="calc-min-h2"></td><td id="calc-min-h3"></td><td id="calc-min-h4"></td>
+                            <td class="first-unit-body" id="calc-min-m1"></td><td id="calc-min-m2"></td>
+                            <td class="first-unit-body" id="calc-min-c1"></td><td id="calc-min-c2"></td><td id="calc-min-c3"></td><td id="calc-min-c4"></td>
+                            <td class="first-unit-body" id="calc-min-my1"></td><td id="calc-min-my2"></td><td id="calc-min-my3"></td>
+                            <td class="first-unit-body" id="calc-min-hm1"></td><td id="calc-min-hm2"></td>
+                            <!-- <td class="first-unit-body" id="calc-min-hr3"></td><td id="calc-min-hr4"></td> -->
+                            <td class="first-unit-body"></td><td></td>
+                            <td class="first-unit-body" id="calc-min-ch1"></td><td id="calc-min-ch2"></td>
+                            <td class="first-unit-body" id="calc-min-y1"></td>
+                        </tr>
+                        <tr class="rpf-calculate">
+                            <td class="bg-orange-header">Máx</td>
+                            <td class="first-unit-body" id="calc-max-h1"></td><td id="calc-max-h2"></td><td id="calc-max-h3"></td><td id="calc-max-h4"></td>
+                            <td class="first-unit-body" id="calc-max-m1"></td><td id="calc-max-m2"></td>
+                            <td class="first-unit-body" id="calc-max-c1"></td><td id="calc-max-c2"></td><td id="calc-max-c3"></td><td id="calc-max-c4"></td>
+                            <td class="first-unit-body" id="calc-max-my1"></td><td id="calc-max-my2"></td><td id="calc-max-my3"></td>
+                            <td class="first-unit-body" id="calc-max-hm1"></td><td id="calc-max-hm2"></td>
+                            <!-- <td class="first-unit-body" id="calc-max-hr3"></td><td id="calc-max-hr4"></td> -->
+                            <td class="first-unit-body"></td><td></td>
+                            <td class="first-unit-body" id="calc-max-ch1"></td><td id="calc-max-ch2"></td>
+                            <td class="first-unit-body" id="calc-max-y1"></td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="2" class="bg-orange-header">Potencia Reactiva (MVAR)</td>
+                            <td class="bg-orange-header">Mín</td>
+                            <td class="first-unit-body" >-10</td><td>-10</td><td>-10</td><td>-10</td>
+                            <td class="first-unit-body" >-10</td><td>-10</td>
+                            <td class="first-unit-body" >-2</td><td>-2</td><td>-2</td><td>-2</td>
+                            <td class="first-unit-body" >-5</td><td>-5</td><td>-5</td>
+                            <td class="first-unit-body" >-5</td><td>-5</td>
+                            <td class="first-unit-body" ></td><td></td>
+                            <td class="first-unit-body" >-10</td><td>-10</td>
+                            <td class="first-unit-body" >-10</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-orange-header">Máx</td>
+                            <td class="first-unit-body" >35</td><td>35</td><td>35</td><td>35</td>
+                            <td class="first-unit-body" >30</td><td>30</td>
+                            <td class="first-unit-body" >3</td><td>3</td><td>3</td><td>14</td>
+                            <td class="first-unit-body" >8</td><td>8</td><td>8</td>
+                            <td class="first-unit-body" >5.5</td><td>5.5</td>
+                            <td class="first-unit-body" ></td><td></td>
+                            <td class="first-unit-body" >25</td><td>25</td>
+                            <td class="first-unit-body" >20</td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="2" class="bg-orange-header">Tensión (kV)</td>
+                            <td class="bg-orange-header">Mín</td>
+                            <td class="first-unit-body" >11.8</td><td>11.8</td><td>11.8</td><td>11.8</td>
+                            <td class="first-unit-body" >12.1</td><td>12.1</td>
+                            <td class="first-unit-body" >9.7</td><td>9.7</td><td>9.7</td><td>7.5</td>
+                            <td class="first-unit-body" >9.2</td><td>9.2</td><td>9.2</td>
+                            <td class="first-unit-body" >9.5</td><td>9.5</td>
+                            <td class="first-unit-body" ></td><td></td>
+                            <td class="first-unit-body" >13.2</td><td>13.2</td>
+                            <td class="first-unit-body" >9.8</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-orange-header">Máx</td>
+                            <td class="first-unit-body" >12.8</td><td>12.8</td><td>12.8</td><td>12.8</td>
+                            <td class="first-unit-body" >12.6</td><td>12.6</td>
+                            <td class="first-unit-body" >10.2</td><td>10.2</td><td>10.2</td><td>8.2</td>
+                            <td class="first-unit-body" >9.6</td><td>9.6</td><td>9.6</td>
+                            <td class="first-unit-body" >10.0</td><td>10.0</td>
+                            <td class="first-unit-body" ></td><td></td>
+                            <td class="first-unit-body" >13.8</td><td>13.8</td>
+                            <td class="first-unit-body" >10.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+>>>>>>> d8ad0b27ff8876c3ce36c1e1edf5e1db272e0c05
 {% endblock %}
