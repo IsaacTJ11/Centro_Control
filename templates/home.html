@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Centro de Control{% endblock %}
@@ -53,60 +52,4 @@
     </div>
 </div>
 
-=======
-{% extends "base.html" %}
-
-{% block title %}Centro de Control{% endblock %}
-
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/home.js') }}"></script>
-{% endblock %}
-
-{% block breadcrumb %}Home{% endblock %}
-
-
-{% block content %}
-<div class="page-title">
-    <i class="fas fa-home"></i>
-    Panel de Control Principal
-</div>
-
-<div class="grid-cards">
-    <div class="home-card" data-page="/huinco">
-        <h3><i class="fas fa-bridge-water"></i> Embalse y Desembalse</h3>
-        <p>Control y monitoreo de niveles de agua en presas Huinco, Tulumayo y Pulmón Matucana. Visualización de
-            proyecciones futuras</p>
-    </div>
-
-    <div class="home-card" data-page="/bypass">
-        <h3><span class="material-symbols-outlined">window_closed</span> Regulación Compuertas</h3>
-        <p>Gestión de compuertas Presa Huinco y Toma Moyopampa. Configuración de parámetros de compuertas</p>
-    </div>
-
-    <div class="home-card" data-page="/costo-marginal">
-        <h3><i class="fas fa-chart-line"></i> COES</h3>
-        <p>Seguimiento de costos marginales, despacho proyectado y RSF. Datos del día y proyecciones futuras</p>
-    </div>
-
-    <div class="home-card" data-page="/indis-diaria">
-        <h3><i class="fas fa-calendar-times"></i> Indisponibilidades</h3>
-        <p>CCalendario de indisponibilidades por central. Gestión automática de solicitudes de desconexión</p>
-    </div>
-
-    <div class="home-card" data-page="/reportes_rer">
-        <h3><span class="material-symbols-outlined">energy_savings_leaf</span> Reportes RER</h3>
-        <p>Estado de aerogeneradores e inversores. Informes y reportes de tecnologías Wind y Solar</p>
-    </div>
-
-    <div class="home-card" data-page="/estado-hydro">
-        <h3><span class="material-symbols-outlined">water_ec</span> Reportes Hydro</h3>
-        <p>Monitoreo de unidades hidroeléctricas. Informes y reportes de tecnología Hydro</p>
-    </div>
-</div>
-
->>>>>>> d8ad0b27ff8876c3ce36c1e1edf5e1db272e0c05
 {% endblock %}

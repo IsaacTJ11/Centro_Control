@@ -105,6 +105,9 @@ class SolarDataReader:
         upper = nombre.upper()
         if upper in ('RUBI', 'CLEMESI'):
             return 'CENTRAL'
+        # Eliminar prefijo R_ o C_
+        if upper.startswith('R_') or upper.startswith('C_'):
+            return nombre[2:]
         return nombre
 
     def get_inversores_falla(self):

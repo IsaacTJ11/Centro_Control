@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Centro de Control - 404{% endblock %}
@@ -39,45 +38,3 @@
 </div>
 
 {% endblock %}
-=======
-{% extends "base.html" %}
-
-{% block title %}Centro de Control - 404{% endblock %}
-
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina404.css') }}">
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/pagina404.js') }}"></script>
-{% endblock %}
-
-{% block content %}
-<div class="construccion-container">
-    <div class="construccion-content">
-
-        <h1 class="construccion-title">
-            <!-- <i class="fas fa-hard-hat"></i> -->
-            Página en Construcción
-            <i class="fas fa-road-barrier"></i>
-        </h1>
-
-        <img src="{{ url_for('static', filename='img/En_construccion.png') }}" 
-             alt="Página en construcción" 
-             class="construccion-img">
-        
-        <p class="construccion-text">
-            Esta sección está siendo desarrollada actualmente.
-            <br>
-            Pronto estará disponible con nuevas funcionalidades.
-        </p>
-        
-        <a href="/" class="btn-volver">
-            <i class="fas fa-home"></i>
-            Volver al Inicio
-        </a>
-    </div>
-</div>
-
-{% endblock %}
->>>>>>> d8ad0b27ff8876c3ce36c1e1edf5e1db272e0c05
