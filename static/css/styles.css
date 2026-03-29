@@ -11,7 +11,10 @@ body {
     min-height: 100vh;
 }
 
-/* Header */
+
+/* ============================================================
+   2. HEADER
+   ============================================================ */
 .header {
     background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
     color: white;
@@ -48,7 +51,6 @@ body {
 .logo img {
     height: 100%;
     width: 60px;
-    /* Adjusted to look better than width: 10% */
     display: block;
     margin-right: 10px;
 }
@@ -65,7 +67,14 @@ body {
     gap: 15px;
 }
 
-/* Sidebar */
+
+/* ============================================================
+   3. SIDEBAR
+   ============================================================ */
+
+/* ----------------------------
+   3.1 Base y transiciones
+   ---------------------------- */
 .sidebar {
     width: 280px;
     background: white;
@@ -78,95 +87,6 @@ body {
     z-index: 100;
     transition: width 0.3s ease, transform 0.3s ease;
 }
-
-/* ==============================
-   PRE-ACTIVE SIDEBAR (aplicado antes del primer paint)
-============================== */
-.pre-active-parent {
-    background: transparent !important;
-    color: #ff6b35 !important;
-    border-left: 4px solid #ff6b35 !important;
-}
-
-.pre-active-parent i,
-.pre-active-parent .material-symbols-outlined {
-    color: #ff6b35 !important;
-}
-
-.pre-active-parent .submenu-arrow {
-    transform: rotate(180deg) !important;
-}
-
-.pre-active-submenu {
-    display: block !important;
-}
-
-.pre-active-child {
-    background: #ff6b35 !important;
-    color: white !important;
-}
-
-/* Estado inicial sin transición para evitar flash al recargar */
-html.sidebar-pre-collapsed .sidebar {
-    display: none !important;
-    width: 60px !important;
-    transition: none !important;
-}
-
-html.sidebar-pre-collapsed .sidebar .menu-text {
-    display: none !important;
-    max-width: 0 !important;
-    opacity: 0 !important;
-    transition: none !important;
-}
-
-html.sidebar-pre-collapsed .sidebar .submenu-arrow {
-    display: none !important;
-    max-width: 0 !important;
-    opacity: 0 !important;
-    transition: none !important;
-}
-
-html.sidebar-pre-collapsed .main-content {
-    margin-left: 60px !important;
-    transition: none !important;
-}
-
-.sidebar.collapsed {
-    width: 60px !important;
-    overflow-x: hidden !important;
-}
-
-.sidebar.collapsed .menu-text {
-    display: none;
-}
-
-.sidebar.collapsed .submenu {
-    display: none !important;
-}
-
-.sidebar.collapsed .sidebar-item.active {
-    background: transparent;
-    color: #333
-}
-
-.sidebar.collapsed .sidebar-item.active i,
-.sidebar.collapsed .sidebar-item.active .material-symbols-outlined {
-    color: #ff6b35;
-}
-
-/* .sidebar.collapsed .sidebar-item {
-    width: 60px !important;
-    padding: 0 !important;
-    justify-content: center !important;
-}
-
-.sidebar.collapsed .sidebar-item i,
-.sidebar.collapsed .sidebar-item .material-symbols-outlined {
-    margin: 0 !important;
-    min-width: 60px !important;
-    text-align: center !important;
-} */
 
 .sidebar-item {
     padding: 15px 20px;
@@ -184,12 +104,6 @@ html.sidebar-pre-collapsed .main-content {
     border-left: 4px solid #ff6b35;
 }
 
-.sidebar-item.active {
-    background: transparent;
-    color: #333;
-    border-left: 4px solid #ff6b35;
-}
-
 .sidebar-item i {
     font-size: 18px;
     width: 20px;
@@ -197,10 +111,10 @@ html.sidebar-pre-collapsed .main-content {
     padding-left: 3px;
 }
 
-.sidebar-item .material-symbols-outlined{
+.sidebar-item .material-symbols-outlined {
     font-size: 25px;
     width: 20px;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
 /* Transición gradual de textos al colapsar/descolapsar */
@@ -211,20 +125,6 @@ html.sidebar-pre-collapsed .main-content {
     overflow: hidden;
     white-space: nowrap;
     max-width: 200px;
-    opacity: 1;
-    transition: max-width 0.3s ease, opacity 0.25s ease;
-}
-
-
-.sidebar.collapsed .submenu-arrow {
-    max-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-width 0.3s ease, opacity 0.25s ease;
-}
-
-.sidebar:not(.collapsed) .submenu-arrow {
-    max-width: 20px;
     opacity: 1;
     transition: max-width 0.3s ease, opacity 0.25s ease;
 }
@@ -271,7 +171,141 @@ html.sidebar-pre-collapsed .main-content {
     color: white;
 }
 
-/* Main Content */
+/* ----------------------------
+   3.2 Estado colapsado
+   ---------------------------- */
+.sidebar.collapsed {
+    width: 60px !important;
+    overflow-x: hidden !important;
+}
+
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .submenu {
+    display: none !important;
+}
+
+.sidebar.collapsed .submenu-arrow {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.3s ease, opacity 0.25s ease;
+}
+
+.sidebar:not(.collapsed) .submenu-arrow {
+    max-width: 20px;
+    opacity: 1;
+    transition: max-width 0.3s ease, opacity 0.25s ease;
+}
+
+.sidebar.collapsed .sidebar-item.active {
+    background: transparent;
+    color: #333;
+}
+
+.sidebar.collapsed .sidebar-item.active i,
+.sidebar.collapsed .sidebar-item.active .material-symbols-outlined {
+    color: #ff6b35;
+}
+
+/* ----------------------------
+   3.3 Pre-colapso (sin transición al recargar)
+   ---------------------------- */
+html.sidebar-pre-collapsed .sidebar {
+    display: none !important;
+    width: 60px !important;
+    transition: none !important;
+}
+
+html.sidebar-pre-collapsed .sidebar .menu-text {
+    display: none !important;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    transition: none !important;
+}
+
+html.sidebar-pre-collapsed .sidebar .submenu-arrow {
+    display: none !important;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    transition: none !important;
+}
+
+html.sidebar-pre-collapsed .main-content {
+    margin-left: 60px !important;
+    transition: none !important;
+}
+
+/* ----------------------------
+   3.4 Submenús flotantes (sidebar colapsado)
+   ---------------------------- */
+.sidebar.collapsed .submenu.floating {
+    display: block !important;
+    position: fixed;
+    left: 60px;
+    background: white;
+    border-left: 3px solid #ff6b35;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 999;
+    animation: fadeInLeft 0.2s ease;
+}
+
+/* Los textos del submenú flotante sí deben ser visibles */
+.sidebar.collapsed .submenu.floating .menu-text {
+    display: inline !important;
+}
+
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ----------------------------
+   3.5 Estados activos
+   ---------------------------- */
+.sidebar-item.active {
+    background: transparent;
+    color: #ff6b35;
+    border-left: 4px solid #ff6b35;
+}
+
+.sidebar-item.active i,
+.sidebar-item.active .material-symbols-outlined {
+    color: #ff6b35;
+}
+
+.pre-active-parent {
+    background: transparent !important;
+    color: #ff6b35 !important;
+    border-left: 4px solid #ff6b35 !important;
+}
+
+.pre-active-parent i,
+.pre-active-parent .material-symbols-outlined {
+    color: #ff6b35 !important;
+}
+
+.pre-active-parent .submenu-arrow {
+    transform: rotate(180deg) !important;
+}
+
+.pre-active-submenu {
+    display: block !important;
+}
+
+.pre-active-child {
+    background: #ff6b35 !important;
+    color: white !important;
+}
+
+
+/* ============================================================
+   4. MAIN CONTENT
+   ============================================================ */
 .main-content {
     margin-left: 280px;
     padding: 20px;
@@ -281,7 +315,6 @@ html.sidebar-pre-collapsed .main-content {
 
 .main-content.expanded {
     margin-left: 60px;
-    /* max-width: calc(100vw - 60px); */
 }
 
 .page-title {
@@ -302,7 +335,10 @@ html.sidebar-pre-collapsed .main-content {
     color: #ff6b35;
 }
 
-/* Global Cards */
+
+/* ============================================================
+   5. CARDS (globales)
+   ============================================================ */
 .card {
     background: white;
     border-radius: 12px;
@@ -331,7 +367,14 @@ html.sidebar-pre-collapsed .main-content {
     padding: 20px;
 }
 
-/* Buttons Generic */
+
+/* ============================================================
+   6. BOTONES (globales)
+   ============================================================ */
+
+/* ----------------------------
+   6.1 Base
+   ---------------------------- */
 .btn {
     padding: 10px 20px;
     border: none;
@@ -346,6 +389,9 @@ html.sidebar-pre-collapsed .main-content {
     text-decoration: none;
 }
 
+/* ----------------------------
+   6.2 Variantes
+   ---------------------------- */
 .btn-primary {
     background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
     color: white;
@@ -366,6 +412,7 @@ html.sidebar-pre-collapsed .main-content {
     transform: translateY(-2px);
 }
 
+/* Usados en diálogos dinámicos generados por reportes.js */
 .btn-danger {
     background: #dc3545;
     color: white;
@@ -377,20 +424,23 @@ html.sidebar-pre-collapsed .main-content {
 }
 
 .btn-merge {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
 }
 
 .btn-merge:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
 }
 
 .btn-merge i {
     margin-right: 5px;
 }
 
-/* Footer */
+
+/* ============================================================
+   7. FOOTER
+   ============================================================ */
 .footer {
     text-align: center;
     padding: 1rem 0;
@@ -413,114 +463,123 @@ html.sidebar-pre-collapsed .main-content {
     color: #ff6b35;
 }
 
-/* ==============================
-   RESPONSIVE 1920x1080
-============================== */
+
+/* ============================================================
+   8. NOTIFICACIONES (globales)
+   ============================================================ */
+
+/* Movido desde bloque dinámico en main.js */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: auto;
+    opacity: 0.7;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+
+/* ============================================================
+   9. RESPONSIVE
+   ============================================================ */
+
+/* ----------------------------
+   9.1 Pantallas grandes ≥1600px
+   ---------------------------- */
 @media (min-width: 1600px) {
     .sidebar {
         width: 300px;
     }
+
     .main-content {
         margin-left: 300px;
     }
+
     .main-content.expanded {
         margin-left: 60px;
     }
+
     .sidebar-item {
         padding: 17px 22px;
         font-size: 15px;
     }
+
     .submenu-item {
         font-size: 15px;
     }
+
     .card-header {
         font-size: 16px;
         padding: 18px 24px;
     }
+
     .card-body {
         padding: 24px;
     }
+
     .page-title {
         font-size: 28px;
         margin-bottom: 28px;
     }
+
     .btn {
         font-size: 15px;
         padding: 11px 22px;
     }
+
     .header {
         height: 76px;
     }
+
     .sidebar {
         top: 76px;
         height: calc(100vh - 76px);
     }
+
     .main-content {
         min-height: calc(100vh - 76px);
     }
 }
 
-/* ==============================
-   SUBMENÚS FLOTANTES (sidebar colapsado)
-============================== */
-.sidebar.collapsed .submenu {
-    display: none !important;
-}
-
-.sidebar.collapsed .submenu.floating {
-    display: block !important;
-    position: fixed;
-    left: 60px;
-    background: white;
-    border-left: 3px solid #ff6b35;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
-    min-width: 200px;
-    z-index: 999;
-    animation: fadeInLeft 0.2s ease;
-}
-
-/* Los textos del submenú flotante sí deben ser visibles */
-.sidebar.collapsed .submenu.floating .menu-text {
-    display: inline !important;
-}
-
-@keyframes fadeInLeft {
-    from { opacity: 0; transform: translateX(-8px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-
-.sidebar-item.active {
-    background: transparent;
-    color: #ff6b35;
-    border-left: 4px solid #ff6b35;
-}
-
-.sidebar-item.active i,
-.sidebar-item.active .material-symbols-outlined {
-    color: #ff6b35;
-}
-
-/* ==============================
-   RESPONSIVE MÓVIL ≤768px
-============================== */
+/* ----------------------------
+   9.2 Móvil ≤768px
+   ---------------------------- */
 @media (max-width: 768px) {
     .sidebar {
         width: 55px !important;
         transform: translateX(0);
     }
+
     .sidebar .menu-text {
-    max-width: 0 !important;
-    opacity: 0 !important;
+        max-width: 0 !important;
+        opacity: 0 !important;
     }
+
     .sidebar .submenu-arrow {
         max-width: 0 !important;
         opacity: 0 !important;
     }
+
     .main-content,
     .main-content.expanded {
         margin-left: 55px !important;
     }
+
     .sidebar .submenu.floating {
         display: block !important;
         position: fixed;
@@ -533,19 +592,24 @@ html.sidebar-pre-collapsed .main-content {
         z-index: 999;
         animation: fadeInLeft 0.2s ease;
     }
+
     .menu-toggle {
         display: none;
     }
+
     .page-title {
         font-size: 18px;
     }
+
     .card-header {
         font-size: 13px;
         padding: 12px 15px;
     }
+
     .card-body {
         padding: 12px;
     }
+
     .btn {
         font-size: 13px;
         padding: 8px 14px;

@@ -1,4 +1,10 @@
-/* Two-column layout */
+/* ============================================================
+   1. LAYOUT
+   ============================================================ */
+
+/* ----------------------------
+   1.1 Columnas y cards
+   ---------------------------- */
 .two-column {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -6,7 +12,6 @@
     margin-bottom: 20px;
 }
 
-/* Status Cards specific to reports */
 .status-card {
     background: white;
     border-radius: 12px;
@@ -44,13 +49,21 @@
     align-items: center;
 }
 
-/* Equipment List Item */
+
+/* ============================================================
+   2. EQUIPMENT ITEMS
+   ============================================================ */
+
+/* ----------------------------
+   2.1 Item base
+   ---------------------------- */
 .equipment-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
     min-height: 40px;
     transition: all 0.3s ease;
+    background: transparent !important;
 }
 
 .equipment-item {
@@ -61,22 +74,11 @@
     border-radius: 6px;
     cursor: default;
     transition: all 0.3s ease;
-    /* background: white;
-    border: 2px solid #ffb99f; */
 }
 
-.equipment-item.ok {
-    border-left-color: none;
-    /* background: none; */
-    border: none
-}
-
-/* Equipment items con fecha_fin en modo Todos */
-/* .equipment-item.completed .status-indicator {
-    border: 2px solid #999;
-    background-clip: padding-box;
-} */
-
+/* ----------------------------
+   2.2 Campos del item
+   ---------------------------- */
 .equipment-name {
     font-weight: 600;
     color: #333;
@@ -84,6 +86,7 @@
     flex: 0 0 50px;
     cursor: pointer;
     transition: color 0.3s ease;
+    position: relative;
 }
 
 .equipment-name:hover {
@@ -119,7 +122,9 @@
     font-size: 12px;
 }
 
-/* Status Indicators */
+/* ----------------------------
+   2.3 Status indicators
+   ---------------------------- */
 .status-indicator {
     display: inline-block;
     width: 12px;
@@ -144,6 +149,9 @@
     background: #dc3545;
 }
 
+/* ----------------------------
+   2.4 Status badges (E/S, F/S)
+   ---------------------------- */
 .status {
     padding: 4px 8px;
     border-radius: 12px;
@@ -166,7 +174,161 @@
     color: #721c24;
 }
 
-/* Botón único de tres estados */
+/* ----------------------------
+   2.5 J5 badge
+   ---------------------------- */
+.j5-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.j5-badge.j5-ok {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+.j5-badge.j5-pending {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+.j5-badge:empty {
+    display: none;
+}
+
+/* ----------------------------
+   2.6 Fondos de turno
+   ---------------------------- */
+.equipment-fecha.turno-actual {
+    background: #b6ffb6d2;
+    padding: 1px 1px;
+    border-radius: 8px;
+}
+
+.equipment-fecha.turno-anterior {
+    background: #b6ffb63d;
+    padding: 1px 1px;
+    border-radius: 8px;
+}
+
+.equipment-fecha.empty-fecha-fin {
+    background: #ff6b352f;
+    color: white;
+    padding: 6.5px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Solar — ancho de nombre específico */
+[data-tecnologia="solar"] .equipment-name {
+    flex: 0 0 50px;
+}
+
+
+/* ============================================================
+   3. FILTROS Y CONTROLES
+   ============================================================ */
+
+/* ----------------------------
+   3.1 Contenedor de filtros
+   ---------------------------- */
+.filters-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    justify-content: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ----------------------------
+   3.2 Botones de tipo (FALLA / PAUSA / MANT)
+   ---------------------------- */
+.filter-tipo-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.filter-tipo-btn:hover {
+    opacity: 0.7;
+}
+
+.filter-tipo-btn.active .filter-tipo-text {
+    color: #333;
+}
+
+.filter-tipo-btn.inactive .filter-tipo-text {
+    color: #999;
+}
+
+.filter-tipo-btn.inactive .status-indicator {
+    opacity: 0.4;
+}
+
+.filter-tipo-btn-solar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.filter-tipo-btn-solar:hover {
+    opacity: 0.7;
+}
+
+.filter-tipo-btn-solar.active .filter-tipo-text {
+    color: #333;
+}
+
+.filter-tipo-btn-solar.inactive .filter-tipo-text {
+    color: #999;
+}
+
+.filter-tipo-btn-solar.inactive .status-indicator {
+    opacity: 0.4;
+}
+
+.filter-tipo-text {
+    transition: color 0.3s ease;
+}
+
+/* Items filtrados (ocultos) */
+.equipment-item.filtered-out {
+    display: none !important;
+}
+
+/* ----------------------------
+   3.3 Botón de estado de vista (Activos / Turno)
+   ---------------------------- */
 .view-state-button {
     padding: 6px 16px;
     border: none;
@@ -188,10 +350,6 @@
     background: #42cf4e;
 }
 
-.view-state-button.state-todos {
-    background: #6c757d;
-}
-
 .view-state-button:hover {
     opacity: 0.85;
     transform: scale(1.05);
@@ -201,137 +359,41 @@
     transform: scale(0.98);
 }
 
-/* Fecha fin vacía con fondo naranja */
-.equipment-item .equipment-fecha.empty-fecha-fin {
-    background: #ff6b352f;
+/* ----------------------------
+   3.4 Botón actualizar (ícono giratorio)
+   ---------------------------- */
+.btn-actualizar {
+    background: none;
     color: white;
-    padding: 6.5px 8px;
-    border-radius: 8px;
-    font-weight: 600;
-}
-
-/* Fondos para turnos */
-.equipment-fecha.turno-actual {
-    background: #b6ffb6d2;
-    /* color: white; */
-    padding: 1px 1px;
-    border-radius: 8px;
-    /* font-weight: 600; */
-}
-
-.equipment-fecha.turno-anterior {
-    background: #b6ffb63d;
-    /* color: #333; */
-    padding: 1px 1px;
-    border-radius: 8px;
-    /* font-weight: 600; */
-}
-
-/* Switch for Filters
-.switch-container {
+    border: none;
+    padding: 0;
+    width: auto;
+    height: auto;
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 30px;
-    height: 15px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
+    justify-content: center;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 15px;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    box-shadow: none;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
+.btn-actualizar:hover {
+    opacity: 0.8;
 }
 
-input:checked+.slider {
-    background-color: #ff6b35;
+.btn-actualizar:active {
+    transform: scale(0.95);
 }
 
-/* input:focus+.slider {
-    box-shadow: 0 0 1px #ff6b35;
-} */
-
-input:checked+.slider:before {
-    transform: translateX(15px);
+.btn-actualizar.rotating i {
+    animation: rotate 1s linear infinite;
 }
 
-.switch-label {
-    font-size: 12px;
-    color: #666;
-    display: inline-block;
-    min-width: 40px;
-    text-align: left;
-} */
 
-/* Actions Card */
-.actions-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-.action-section h4 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 16px;
-}
-
-.action-list {
-    margin-bottom: 15px;
-}
-
-.action-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    margin-bottom: 8px;
-    background: #f8f9fa;
-    border-radius: 4px;
-}
-
-.action-text {
-    font-size: 14px;
-    color: #555;
-}
-
-/* Tables (Reports) */
+/* ============================================================
+   4. TABLA RESUMEN DIARIO
+   ============================================================ */
 .summary-table {
     background: white;
     border-radius: 12px;
@@ -412,7 +474,14 @@ input:checked+.slider:before {
     transition: transform 0.3s ease;
 }
 
-/* Modals / Dialogs */
+
+/* ============================================================
+   5. MODALES Y DIÁLOGOS
+   ============================================================ */
+
+/* ----------------------------
+   5.1 Base común
+   ---------------------------- */
 .edit-dialog,
 .merge-dialog,
 .merge-select-dialog {
@@ -436,23 +505,40 @@ input:checked+.slider:before {
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    /* animation: slideUp 0.3s ease; */
     position: relative;
     width: 90%;
 }
 
+.dialog-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.dialog-close-btn:hover {
+    background: #5a6268;
+    transform: rotate(90deg);
+}
+
+/* ----------------------------
+   5.2 Edit dialog
+   ---------------------------- */
 .edit-dialog-content {
     max-width: 500px;
-}
-
-.merge-dialog-content {
-    max-width: 500px;
-}
-
-.merge-select-content {
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
 }
 
 .edit-dialog-header,
@@ -527,22 +613,10 @@ input:checked+.slider:before {
     flex: 1;
 }
 
-/* Colors for edit tipo text */
-.edit-tipo-select-wrapper:has(#tipo-indicator.status-PAUSA) .edit-tipo-text {
-    color: #ffc107;
-}
-
-.edit-tipo-select-wrapper:has(#tipo-indicator.status-STOP) .edit-tipo-text {
-    color: #ffc107;
-}
-
-.edit-tipo-select-wrapper:has(#tipo-indicator.status-FALLA) .edit-tipo-text {
-    color: #dc3545;
-}
-
-.edit-tipo-select-wrapper:has(#tipo-indicator.status-MANT) .edit-tipo-text {
-    color: #9b59b6;
-}
+.edit-tipo-select-wrapper:has(#tipo-indicator.status-PAUSA) .edit-tipo-text { color: #ffc107; }
+.edit-tipo-select-wrapper:has(#tipo-indicator.status-STOP)  .edit-tipo-text { color: #ffc107; }
+.edit-tipo-select-wrapper:has(#tipo-indicator.status-FALLA) .edit-tipo-text { color: #dc3545; }
+.edit-tipo-select-wrapper:has(#tipo-indicator.status-MANT)  .edit-tipo-text { color: #9b59b6; }
 
 .edit-tipo-select {
     position: absolute;
@@ -555,19 +629,6 @@ input:checked+.slider:before {
     z-index: 1;
 }
 
-.edit-buttons,
-.merge-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: flex-end;
-    margin-top: 25px;
-    padding-top: 20px;
-}
-
-.edit-buttons {
-    border-top: 1px solid #e0e0e0;
-}
-
 .edit-circuito-display {
     padding: 10px 12px;
     background: #f8f9fa;
@@ -576,32 +637,28 @@ input:checked+.slider:before {
     color: #333;
 }
 
-.dialog-close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
+.edit-buttons {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    padding: 0;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
 }
 
-.dialog-close-btn:hover {
-    background: #5a6268;
-    transform: rotate(90deg);
+/* ----------------------------
+   5.3 Merge / Unmerge dialog
+   ---------------------------- */
+.merge-dialog-content {
+    max-width: 500px;
 }
 
-/* Merge Options */
+.merge-select-content {
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
 .merge-option {
     background: #f8f9fa;
     padding: 15px;
@@ -615,7 +672,6 @@ input:checked+.slider:before {
 .merge-option:hover {
     background: #e9ecef;
     border-color: #ff6b35;
-    /* transform: translateX(5px); */
 }
 
 .merge-option.selected {
@@ -638,28 +694,28 @@ input:checked+.slider:before {
 }
 
 .compact-merge-option {
-    padding: 10.5px 10.5px !important; /* 30% menos que el original (15px 15px) */
-    margin-bottom: 7px !important; /* 30% menos que 10px */
-    transition: none !important; /* Sin animación */
+    padding: 10.5px !important;
+    margin-bottom: 7px !important;
+    transition: none !important;
 }
 
 .compact-merge-option:hover {
-    transform: none !important; /* Sin desplazamiento */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important; /* Mantener solo cambio de sombra */
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
 .compact-merge-option .merge-option-title {
-    font-size: 14px; /* 30% menos que ~14px */
-    margin-bottom: 3.5px; /* 30% menos que 5px */
+    font-size: 14px;
+    margin-bottom: 3.5px;
 }
 
 .compact-merge-option .merge-option-dates {
-    font-size: 12px; /* 30% menos que 12px */
+    font-size: 12px;
 }
 
 .compact-merge-option .status-indicator {
-    width: 12px; /* 30% menos que 12px */
-    height: 12px; /* 30% menos que 12px */
+    width: 12px;
+    height: 12px;
 }
 
 .merge-no-records {
@@ -675,9 +731,14 @@ input:checked+.slider:before {
     color: #ddd;
 }
 
+.merge-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 25px;
+    padding-top: 20px;
+}
 
-
-/* Indicador de tiempo entre registros */
 .time-between-records {
     display: flex;
     align-items: center;
@@ -700,7 +761,6 @@ input:checked+.slider:before {
     border-radius: 4px;
 }
 
-/* Warnings */
 .merge-warning {
     background: #fff3cd;
     color: #856404;
@@ -713,95 +773,9 @@ input:checked+.slider:before {
     gap: 10px;
 }
 
-.delete-warning-container {
-    margin: 20px 0;
-}
-
-.delete-question {
-    text-align: center;
-    font-size: 15px;
-    color: #333;
-    line-height: 1.5;
-}
-
-.time-warning-text {
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-/* Drag & Drop */
-.equipment-item.dragging {
-    opacity: 0.5;
-    transform: scale(0.95);
-}
-
-.equipment-item.drag-over {
-    background: #fff9e6 !important;
-    border: 2px dashed #ff6b35;
-    transform: scale(1.02);
-}
-
-.equipment-item.drag-not-allowed {
-    cursor: not-allowed !important;
-}
-
-.equipment-list.drag-not-allowed {
-    cursor: not-allowed !important;
-}
-
-.equipment-list.drag-over-list {
-    background: #f0f8ff;
-    border: 2px dashed #4a90e2;
-    border-radius: 8px;
-}
-
-.equipment-list:empty::after {
-    content: 'Arrastra elementos aquí';
-    display: block;
-    text-align: center;
-    padding: 20px;
-    color: #999;
-    font-style: italic;
-}
-
-.drop-indicator {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1000;
-    background: #fff;
-    border: 2px dashed #4a90e2;
-    border-radius: 6px;
-    padding: 5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.merge-indicator {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1000;
-    background: #28a745;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.5);
-    animation: pulse 1s infinite;
-}
-
-.btn-merge {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-}
-
-.btn-merge:hover {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    transform: translateY(-2px);
-}
-
+/* ----------------------------
+   5.4 Confirm / Delete dialog
+   ---------------------------- */
 .confirm-dialog {
     position: fixed;
     top: 0;
@@ -879,128 +853,92 @@ input:checked+.slider:before {
     min-width: 100px;
 }
 
-/* Sección de Filtros */
-
-.filters-controls {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex: 1;
-    justify-content: center;
+.delete-warning-container {
+    margin: 20px 0;
 }
 
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* Botones de filtro por tipo */
-.filter-tipo-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.filter-tipo-btn:hover {
-    opacity: 0.7;
-}
-
-.filter-tipo-btn.active {
-    border-color: #333;
-    background: white;
-}
-
-.filter-tipo-btn.active .filter-tipo-text {
+.delete-question {
+    text-align: center;
+    font-size: 15px;
     color: #333;
+    line-height: 1.5;
 }
 
-.filter-tipo-btn.inactive {
-    border-color: #ddd;
-    /* background: #f5f5f5; */
+.time-warning-text {
+    font-size: 14px;
+    line-height: 1.6;
 }
 
-.filter-tipo-btn.inactive .filter-tipo-text {
-    color: #999;
-}
 
-.filter-tipo-btn.inactive .status-indicator {
-    opacity: 0.4;
-}
-
-.filter-tipo-btn-solar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.filter-tipo-btn-solar:hover { opacity: 0.7; }
-.filter-tipo-btn-solar.active .filter-tipo-text { color: #333; }
-.filter-tipo-btn-solar.inactive .filter-tipo-text { color: #999; }
-.filter-tipo-btn-solar.inactive .status-indicator { opacity: 0.4; }
-
-.filter-tipo-text {
-    transition: color 0.3s ease;
-}
-
-/* Botón de actualizar */
-.btn-actualizar {
-    background: none;
-    color: white;
-    border: none;
-    padding: 0;
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 18px;
-    box-shadow: none;
-}
-
-.btn-actualizar:hover {
-    opacity: 0.8;
-    transform: none;
-}
-
-.btn-actualizar:active {
+/* ============================================================
+   6. DRAG & DROP
+   ============================================================ */
+.equipment-item.dragging {
+    opacity: 0.5;
     transform: scale(0.95);
 }
 
-.btn-actualizar i {
-    transition: transform 0.3s ease;
+.equipment-item.drag-over {
+    background: #fff9e6 !important;
+    border: 2px dashed #ff6b35;
+    transform: scale(1.02);
 }
 
-.btn-actualizar.rotating i {
-    animation: rotate 1s linear infinite;
+.equipment-item.drag-not-allowed {
+    cursor: not-allowed !important;
 }
 
-/* Items filtrados (ocultos) */
-.equipment-item.filtered-out {
-    display: none !important;
+.equipment-list.drag-not-allowed {
+    cursor: not-allowed !important;
 }
 
-/* Tooltip para nombres de aerogeneradores */
-.equipment-name {
-    position: relative;
+.equipment-list.drag-over-list {
+    background: #f0f8ff;
+    border: 2px dashed #4a90e2;
+    border-radius: 8px;
 }
 
+.equipment-list:empty::after {
+    content: 'Arrastra elementos aquí';
+    display: block;
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-style: italic;
+}
+
+.drop-indicator {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: #fff;
+    border: 2px dashed #4a90e2;
+    border-radius: 6px;
+    padding: 5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.merge-indicator {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: #28a745;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.5);
+    animation: pulse 1s infinite;
+}
+
+
+/* ============================================================
+   7. TOOLTIPS
+   ============================================================ */
 .equipment-name-tooltip {
     position: absolute;
     bottom: 100%;
@@ -1025,10 +963,6 @@ input:checked+.slider:before {
     opacity: 1;
 }
 
-[data-tecnologia="solar"] .equipment-name {
-    flex: 0 0 50px;
-}
-
 .tooltip-header {
     font-weight: bold;
     margin-bottom: 5px;
@@ -1043,149 +977,97 @@ input:checked+.slider:before {
     font-weight: bold;
     color: #333;
 }
-/* 
-.tooltip-tipo-text {
-    color: #ffc107;
-}
-
-.tooltip-tipo-text.tipo-FALLA {
-    color: #dc3545;
-}
-
-.tooltip-tipo-text.tipo-MANT {
-    color: #9b59b6;
-} */
 
 .tooltip-circuito {
     margin-top: 5px;
     color: #333;
 }
 
-/* Indicación J5 */
-.j5-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    min-width: 20px;
-    text-align: center;
-}
 
-.j5-badge.j5-ok {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #6ee7b7;
-}
-
-.j5-badge.j5-pending {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
-}
-
-.j5-badge:empty {
-    display: none;
-}
-
-/* Animations */
+/* ============================================================
+   8. ANIMACIONES
+   ============================================================ */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
 }
 
 @keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
+    0%, 100% { transform: scale(1);   }
+    50%       { transform: scale(1.1); }
 }
 
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
 }
 
 
-/* ==============================
-   REPORTES RER — 1920x1080
-============================== */
+/* ============================================================
+   9. RESPONSIVE
+   ============================================================ */
+
+/* ----------------------------
+   9.1 Pantallas grandes ≥1600px
+   ---------------------------- */
 @media (min-width: 1600px) {
     .two-column {
         grid-template-columns: 1fr 1fr;
         gap: 28px;
     }
+
     .equipment-section h4 {
         font-size: 16px;
     }
+
     .equipment-name {
         font-size: 14px;
         flex: 0 0 52px;
     }
+
     .equipment-fecha {
         font-size: 12px;
         flex: 0 0 85px;
     }
+
     .equipment-time {
         font-size: 13px;
         flex: 0 0 52px;
     }
+
     .equipment-report {
         font-size: 11px;
         flex: 0 0 52px;
     }
+
     .equipment-status {
         font-size: 14px;
     }
+
     .status-indicator {
         width: 14px;
         height: 14px;
     }
+
     .equipment-table th {
         font-size: 15px;
         padding: 14px 18px;
     }
+
     .equipment-table td {
         font-size: 15px;
         padding: 12px 18px;
     }
+
     .view-state-button {
         font-size: 13px;
         padding: 8px 20px;
         min-width: 105px;
-    }
-    .actions-grid {
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 30px;
     }
 
     [data-tecnologia="solar"] .equipment-name {
@@ -1196,49 +1078,53 @@ input:checked+.slider:before {
         flex: 0 0 60px;
         font-size: 11px;
     }
+}
 
-}   
-
-/* ==============================
-   REPORTES RER — MÓVIL ≤768px
-============================== */
+/* ----------------------------
+   9.2 Móvil ≤768px
+   ---------------------------- */
 @media (max-width: 768px) {
     .two-column {
         grid-template-columns: 1fr;
     }
-    .actions-grid {
-        grid-template-columns: 1fr;
-    }
+
     .section-header {
         flex-wrap: wrap;
         gap: 8px;
     }
+
     .filters-controls {
         flex-wrap: wrap;
         gap: 8px;
         justify-content: flex-start;
     }
+
     .equipment-name {
         font-size: 11px;
         flex: 0 0 38px;
     }
+
     .equipment-fecha {
         font-size: 9px;
         flex: 0 0 62px;
     }
+
     .equipment-time {
         font-size: 10px;
         flex: 0 0 40px;
     }
+
     .equipment-report {
         font-size: 8px;
         flex: 0 0 38px;
     }
+
     .equipment-table th,
     .equipment-table td {
         font-size: 12px;
         padding: 8px 10px;
     }
+
     .edit-dialog-content,
     .merge-dialog-content,
     .merge-select-content,
@@ -1248,37 +1134,36 @@ input:checked+.slider:before {
     }
 }
 
-/* ==============================
-   ADAPTIVE LAYOUT SEGÚN SIDEBAR
-   (Cuando el sidebar está desplegado, el espacio es menor)
-============================== */
+/* ----------------------------
+   9.3 Sidebar colapsado
+   ---------------------------- */
 .main-content:not(.expanded) .equipment-name {
     flex: 0 0 40px;
     font-size: 11px;
 }
+
 .main-content:not(.expanded) .equipment-fecha {
     flex: 0 0 70px;
     font-size: 9px;
 }
+
 .main-content:not(.expanded) .equipment-time {
     flex: 0 0 50px;
     font-size: 10px;
 }
+
 .main-content:not(.expanded) .equipment-report {
     flex: 0 0 32px;
     font-size: 8px;
 }
+
 .main-content:not(.expanded) .equipment-item {
     gap: 6px;
     padding: 4px;
 }
+
 .main-content:not(.expanded) .j5-badge {
     min-width: 15px;
     font-size: 7.5px;
     padding: 2px 4px;
-}
-
-/* Prevenir fondo rojo indeseado en la lista */
-.equipment-list {
-    background: transparent !important;
 }
