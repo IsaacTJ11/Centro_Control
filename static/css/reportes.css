@@ -234,6 +234,42 @@
     flex: 0 0 50px;
 }
 
+/* ============================================================
+   3. SIDEBAR
+   ============================================================ */
+/* ----------------------------
+   3.1 Sidebar colapsado
+   ---------------------------- */
+.main-content:not(.expanded) .equipment-name {
+    flex: 0 0 40px;
+    font-size: 11px;
+}
+
+.main-content:not(.expanded) .equipment-fecha {
+    flex: 0 0 70px;
+    font-size: 9px;
+}
+
+.main-content:not(.expanded) .equipment-time {
+    flex: 0 0 50px;
+    font-size: 10px;
+}
+
+.main-content:not(.expanded) .equipment-report {
+    flex: 0 0 32px;
+    font-size: 8px;
+}
+
+.main-content:not(.expanded) .equipment-item {
+    gap: 6px;
+    padding: 4px;
+}
+
+.main-content:not(.expanded) .j5-badge {
+    min-width: 15px;
+    font-size: 7.5px;
+    padding: 2px 4px;
+}
 
 /* ============================================================
    3. FILTROS Y CONTROLES
@@ -899,7 +935,7 @@
 }
 
 .equipment-list:empty::after {
-    content: 'Arrastra elementos aquí';
+    content: 'No hay equipos en FALLA/MANTENIMIENTO';
     display: block;
     text-align: center;
     padding: 20px;
@@ -1021,32 +1057,25 @@
         gap: 28px;
     }
 
-    .equipment-section h4 {
-        font-size: 16px;
+    .equipment-item {
+        gap: 12px;
+        padding: 6px;
     }
 
     .equipment-name {
-        font-size: 14px;
         flex: 0 0 52px;
     }
 
     .equipment-fecha {
-        font-size: 12px;
-        flex: 0 0 85px;
+        flex: 0 0 95px;
     }
 
     .equipment-time {
-        font-size: 13px;
-        flex: 0 0 52px;
+        flex: 0 0 58px;
     }
 
     .equipment-report {
-        font-size: 11px;
-        flex: 0 0 52px;
-    }
-
-    .equipment-status {
-        font-size: 14px;
+        flex: 0 0 20px;
     }
 
     .status-indicator {
@@ -1054,34 +1083,93 @@
         height: 14px;
     }
 
-    .equipment-table th {
-        font-size: 15px;
-        padding: 14px 18px;
-    }
-
-    .equipment-table td {
-        font-size: 15px;
-        padding: 12px 18px;
-    }
-
-    .view-state-button {
-        font-size: 13px;
-        padding: 8px 20px;
-        min-width: 105px;
+    .j5-badge {
+        min-width: 16px;
+        padding: 2px 4px;
+        flex: 0 0 20px;
     }
 
     [data-tecnologia="solar"] .equipment-name {
         flex: 0 0 55px;
     }
+}
+
+/* ----------------------------------------------------
+   9.2 Pantallas grandes ≥1600px con sidebar desplegado
+   ---------------------------------------------------- */
+@media (min-width: 1600px) {
+    .main-content:not(.expanded) .equipment-name {
+        flex: 0 0 52px;
+    }
+
+    .main-content:not(.expanded) .equipment-fecha {
+        flex: 0 0 80px;
+    }
+
+    .main-content:not(.expanded) .equipment-time {
+        flex: 0 0 55px;
+    }
+
+    .main-content:not(.expanded) .equipment-report {
+        flex: 0 0 20px;
+    }
+
+    .main-content:not(.expanded) .equipment-item {
+        gap: 8px;
+        padding: 5px;
+    }
+
+    .main-content:not(.expanded) .j5-badge {
+        flex: 0 0 20px;
+    }
 
     .main-content:not(.expanded) [data-tecnologia="solar"] .equipment-name {
-        flex: 0 0 60px;
-        font-size: 11px;
+        flex: 0 0 55px;
     }
 }
 
+/* ----------------------------------------------------
+   9.3 Pantallas grandes ≥1600px con sidebar colapsado
+   ---------------------------------------------------- */
+.main-content:not(.expanded) .equipment-name {
+    flex: 0 0 40px;
+    font-size: 11px;
+}
+
+.main-content:not(.expanded) .equipment-fecha {
+    flex: 0 0 70px;
+    font-size: 9px;
+}
+
+.main-content:not(.expanded) .equipment-time {
+    flex: 0 0 50px;
+    font-size: 10px;
+}
+
+.main-content:not(.expanded) .equipment-report {
+    flex: 0 0 20px;
+    font-size: 8px;
+}
+
+.main-content:not(.expanded) .equipment-item {
+    gap: 6px;
+    padding: 4px;
+}
+
+.main-content:not(.expanded) .j5-badge {
+    min-width: 15px;
+    font-size: 7.5px;
+    padding: 2px 4px;
+    flex: 0 0 20px;
+}
+
+.main-content:not(.expanded) [data-tecnologia="solar"] .equipment-name {
+    flex: 0 0 45px;
+    font-size: 11px;
+}
+
 /* ----------------------------
-   9.2 Móvil ≤768px
+   9.3 Móvil ≤768px
    ---------------------------- */
 @media (max-width: 768px) {
     .two-column {
@@ -1134,36 +1222,4 @@
     }
 }
 
-/* ----------------------------
-   9.3 Sidebar colapsado
-   ---------------------------- */
-.main-content:not(.expanded) .equipment-name {
-    flex: 0 0 40px;
-    font-size: 11px;
-}
 
-.main-content:not(.expanded) .equipment-fecha {
-    flex: 0 0 70px;
-    font-size: 9px;
-}
-
-.main-content:not(.expanded) .equipment-time {
-    flex: 0 0 50px;
-    font-size: 10px;
-}
-
-.main-content:not(.expanded) .equipment-report {
-    flex: 0 0 32px;
-    font-size: 8px;
-}
-
-.main-content:not(.expanded) .equipment-item {
-    gap: 6px;
-    padding: 4px;
-}
-
-.main-content:not(.expanded) .j5-badge {
-    min-width: 15px;
-    font-size: 7.5px;
-    padding: 2px 4px;
-}

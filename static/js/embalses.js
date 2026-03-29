@@ -148,23 +148,25 @@ function renderizarDashboard(actual, resultado) {
             animations: { enabled: false },
             toolbar: { show: true },
             zoom: { enabled: true, type: 'x', autoScaleYaxis: true },
+            // En options.chart, reemplaza el bloque events completo:
             events: {
-                mounted: (chartContext) => {
-                    // Centrar vista en el último dato con caudal_entrada
-                    const ultimoConEntrada = datosLimpios
-                        .slice()
-                        .reverse()
-                        .find(d => d.caudal_entrada !== null && d.caudal_entrada !== undefined);
+                mounted: (chartContext, config) => {
+                    setTimeout(() => {
+                        const ultimoConEntrada = datosLimpios
+                            .slice()
+                            .reverse()
+                            .find(d => d.caudal_entrada !== null && d.caudal_entrada !== undefined);
 
-                    if (ultimoConEntrada) {
-                        const seisHoras = 6 * 60 * 60 * 1000;
-                        chartContext.updateOptions({
-                            xaxis: {
-                                min: ultimoConEntrada.x - seisHoras,
-                                max: ultimoConEntrada.x + seisHoras
-                            }
-                        });
-                    }
+                        if (ultimoConEntrada) {
+                            const seisHoras = 6 * 60 * 60 * 1000;
+                            chartContext.updateOptions({
+                                xaxis: {
+                                    min: ultimoConEntrada.x - seisHoras,
+                                    max: ultimoConEntrada.x + seisHoras
+                                }
+                            }, false, false);
+                        }
+                    }, 100);
                 }
             }
         },
