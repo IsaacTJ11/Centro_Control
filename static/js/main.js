@@ -213,6 +213,34 @@ function updateToggleIcon() {
    3. NAVEGACIÓN SPA
    ============================================================ */
 
+function waitForInitAndRun(page, attempts = 0) {
+    const MAX_ATTEMPTS = 20; // 20 × 100ms = 2s máximo
+    const initFn = PAGE_INIT_MAP[page];
+    
+    if (!initFn) return;
+
+    // Verificar si la función de la página ya está disponible
+    const fnReady = {
+        '/embalse_huinco':   () => typeof window.initEmbalse    === 'function',
+        '/embalse_tulumayo': () => typeof window.initEmbalse    === 'function',
+        '/pulmon_matucana':  () => typeof window.initEmbalse    === 'function',
+        '/fondo_huinco':     () => typeof window.initCompuertas === 'function',
+        '/bypass_huinco':    () => typeof window.initCompuertas === 'function',
+        '/rpf':              () => typeof window.initRpf        === 'function',
+        '/reportes_rer':     () => typeof window.initReportes   === 'function',
+    };
+
+    const isReady = fnReady[page];
+
+    if (!isReady || isReady()) {
+        initFn();
+    } else if (attempts < MAX_ATTEMPTS) {
+        setTimeout(() => waitForInitAndRun(page, attempts + 1), 100);
+    } else {
+        console.warn(`initFn para ${page} no disponible tras ${MAX_ATTEMPTS} intentos`);
+    }
+}
+
 function loadPage(page) {
     const mainContent = document.getElementById('main-content');
 
@@ -319,7 +347,8 @@ function loadPage(page) {
                        PASO 5: Todo listo → init + fade in
                        ---------------------------- */
                     Promise.all(imagePromises).then(() => {
-                        initPageScripts(page);
+                        // Esperar a que la función init esté disponible (máx 2s)
+                        waitForInitAndRun(page);
                         requestAnimationFrame(() => {
                             mainContent.style.opacity = '1';
                         });

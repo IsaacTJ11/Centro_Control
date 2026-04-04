@@ -49,9 +49,6 @@ function renderizarDashboard(actual, resultado) {
     const grafico     = resultado.datos;
     const anotaciones = resultado.anotaciones;
 
-    /* ----------------------------
-       2.1 Valores actuales
-       ---------------------------- */
     const f = (val) => (val !== null && val !== undefined && !isNaN(val))
         ? parseFloat(val).toFixed(2)
         : "0.00";
@@ -69,23 +66,29 @@ function renderizarDashboard(actual, resultado) {
         document.getElementById('hora-actuales').textContent = `(${horaFormateada})`;
     }
 
-    /* ----------------------------
-       2.2 Preparar datos del gráfico
-       ---------------------------- */
     const datosLimpios = grafico.map(d => ({
         x: new Date(d.fecha).getTime(),
         y: (d.nivel_presa === null || isNaN(d.nivel_presa))
             ? null
             : parseFloat(d.nivel_presa),
-        // Datos extra para el tooltip personalizado
         caudal_entrada:  d.caudal_entrada,
         caudal_descarga: d.caudal_descarga,
         volumen_presa:   d.volumen_presa
     })).filter(p => !isNaN(p.x));
 
-    /* ----------------------------
-       2.3 Construir anotaciones ApexCharts
-       ---------------------------- */
+    // Calcular rango X inicial ANTES de crear el gráfico (evita re-render/parpadeo)
+    let xMin = undefined;
+    let xMax = undefined;
+    const seisHoras = 6 * 60 * 60 * 1000;
+    const ultimoConEntrada = datosLimpios
+        .slice()
+        .reverse()
+        .find(d => d.caudal_entrada !== null && d.caudal_entrada !== undefined);
+    if (ultimoConEntrada) {
+        xMin = ultimoConEntrada.x - seisHoras;
+        xMax = ultimoConEntrada.x + seisHoras;
+    }
+
     const annotations = {
         yaxis: anotaciones.yaxis.map(a => ({
             y: a.y,
@@ -137,9 +140,6 @@ function renderizarDashboard(actual, resultado) {
         }))
     };
 
-    /* ----------------------------
-       2.4 Configuración y render ApexCharts
-       ---------------------------- */
     const options = {
         series: [{ name: 'Nivel Presa', data: datosLimpios }],
         chart: {
@@ -148,33 +148,16 @@ function renderizarDashboard(actual, resultado) {
             animations: { enabled: false },
             toolbar: { show: true },
             zoom: { enabled: true, type: 'x', autoScaleYaxis: true },
-            // En options.chart, reemplaza el bloque events completo:
-            events: {
-                mounted: (chartContext, config) => {
-                    setTimeout(() => {
-                        const ultimoConEntrada = datosLimpios
-                            .slice()
-                            .reverse()
-                            .find(d => d.caudal_entrada !== null && d.caudal_entrada !== undefined);
-
-                        if (ultimoConEntrada) {
-                            const seisHoras = 6 * 60 * 60 * 1000;
-                            chartContext.updateOptions({
-                                xaxis: {
-                                    min: ultimoConEntrada.x - seisHoras,
-                                    max: ultimoConEntrada.x + seisHoras
-                                }
-                            }, false, false);
-                        }
-                    }, 100);
-                }
-            }
+            // Sin bloque events — el rango se define directamente en xaxis
         },
         annotations: annotations,
         stroke: { curve: 'smooth', width: 3 },
         xaxis: {
             type: 'datetime',
-            labels: { datetimeUTC: false }
+            labels: { datetimeUTC: false },
+            // Rango inicial calculado antes del render, sin parpadeo
+            min: xMin,
+            max: xMax,
         },
         yaxis: {
             min: 1855,
@@ -223,10 +206,5 @@ function renderizarDashboard(actual, resultado) {
         new ApexCharts(contenedor, options).render();
     } else {
         console.error("No se encontró el elemento #chart-nivel-huinco");
-    }
-
-    // Auto-init en carga directa (no SPA)
-    if (document.querySelector('#chart-nivel-huinco')) {
-        window.initEmbalse?.();
     }
 }
