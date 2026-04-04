@@ -2,6 +2,7 @@ import psycopg2
 import pandas as pd
 from datetime import datetime, timedelta, time
 from contextlib import contextmanager
+from db_pool import get_pool
 
 # Mapa de prefijos a nombre de central para la tabla solar_status
 # "R_" -> Rubí, "C_" -> Clemesí, "RUBI" / "CLEMESI" (sin prefijo) -> CENTRAL
@@ -40,28 +41,19 @@ class SolarDataReader:
 
     @contextmanager
     def get_connection(self):
-        """Context manager para manejo seguro de conexiones"""
+        pool = get_pool()
         connection = None
         try:
-            connection = psycopg2.connect(
-                host=self.host,
-                port=self.port,
-                user=self.user,
-                password=self.password,
-                database=self.database,
-                connect_timeout=3
-            )
+            connection = pool.getconn()
             yield connection
-
         except psycopg2.Error as e:
-            print(f"Error de conexión a la base de datos: {e}")
+            print(f"Error de conexión: {e}")
             if connection:
                 connection.rollback()
             raise
-
         finally:
             if connection:
-                connection.close()
+                pool.putconn(connection)
 
     def execute_recalculate_values(self):
         """Ejecuta la función recalculate_values en la base de datos (si aplica para solar)"""
