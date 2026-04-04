@@ -1,0 +1,152 @@
+/* ============================================================
+   1. LAYOUT
+   ============================================================ */
+
+/* ----------------------------
+   1.1 Columnas
+   ---------------------------- */
+
+/* Proporción 0.4fr 1fr — igual que embalses, específica de compuertas */
+.two-column {
+    display: grid;
+    grid-template-columns: 0.4fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.one-column {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* ----------------------------
+   1.2 Cards
+   ---------------------------- */
+
+/* styles.css define .card — fondo_huinco.html usa .status-card */
+.status-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   2. CONTROL DE APERTURA (métricas)
+   ============================================================ */
+
+/* ----------------------------
+   2.1 Filas de métricas
+   ---------------------------- */
+.metric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.metric-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.metric-label {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Completo con todas las propiedades para consistencia con embalses.css */
+.metric-value {
+    width: 120px;
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #f8f9fa;
+    color: #333;
+    text-align: right;
+    font-weight: 500;
+}
+
+/* ----------------------------
+   2.2 Botones de navegación en métricas
+   ---------------------------- */
+.metric-row button.btn {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    padding: 10px 15px;
+}
+
+.metric-row button.btn i {
+    font-size: 16px;
+}
+
+/* Ancho completo específico de esta sección */
+.btn-primary {
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+/* ============================================================
+   3. GRÁFICO
+   ============================================================ */
+#chart-compuerta-fondo {
+    min-height: 350px;
+}
+
+
+/* ============================================================
+   4. TABLA DE MOVIMIENTOS RECIENTES
+   ============================================================ */
+.actions-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.actions-table th,
+.actions-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Encabezado verde — indica operatividad de la compuerta */
+.actions-table th {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.actions-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.actions-table td {
+    font-size: 14px;
+    color: #333;
+}
+
+.actions-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* ============================================================
+   5. RESPONSIVE
+   ============================================================ */
+@media (max-width: 992px) {
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+}

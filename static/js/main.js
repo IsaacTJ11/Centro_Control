@@ -214,12 +214,11 @@ function updateToggleIcon() {
    ============================================================ */
 
 function waitForInitAndRun(page, attempts = 0) {
-    const MAX_ATTEMPTS = 20; // 20 × 100ms = 2s máximo
+    const MAX_ATTEMPTS = 30; // 30 × 100ms = 3s máximo
     const initFn = PAGE_INIT_MAP[page];
-    
+
     if (!initFn) return;
 
-    // Verificar si la función de la página ya está disponible
     const fnReady = {
         '/embalse_huinco':   () => typeof window.initEmbalse    === 'function',
         '/embalse_tulumayo': () => typeof window.initEmbalse    === 'function',
@@ -237,7 +236,7 @@ function waitForInitAndRun(page, attempts = 0) {
     } else if (attempts < MAX_ATTEMPTS) {
         setTimeout(() => waitForInitAndRun(page, attempts + 1), 100);
     } else {
-        console.warn(`initFn para ${page} no disponible tras ${MAX_ATTEMPTS} intentos`);
+        console.warn(`[waitForInitAndRun] initFn para ${page} no disponible tras ${MAX_ATTEMPTS} intentos`);
     }
 }
 
@@ -301,8 +300,6 @@ function loadPage(page) {
                 // Scripts globales que NUNCA deben recargarse durante navegación SPA
                 const SKIP_SCRIPTS = [
                     'main.js',
-                    'cdn.jsdelivr.net',
-                    'cdnjs.cloudflare.com',
                     'fonts.googleapis'
                 ];
 
@@ -312,13 +309,20 @@ function loadPage(page) {
                     if (!src) return;
                     if (SKIP_SCRIPTS.some(s => src.includes(s))) return;
 
-                    const existing = document.querySelector(`script[src="${src}"]`);
-                    if (existing) existing.remove();
+                    // Para CDNs externos: solo cargar si no existe ya en el DOM
+                    const isCDN = src.includes('cdn.jsdelivr.net') || src.includes('cdnjs.cloudflare.com');
+                    if (isCDN) {
+                        if (document.querySelector(`script[src="${src}"]`)) return; // ya cargado, omitir
+                    } else {
+                        // Scripts locales de página: recargar siempre para tener versión fresca
+                        const existing = document.querySelector(`script[src="${src}"]`);
+                        if (existing) existing.remove();
+                    }
 
                     scriptPromises.push(new Promise(resolve => {
-                        const newScript  = document.createElement('script');
-                        newScript.src    = src;
-                        newScript.onload = resolve;
+                        const newScript   = document.createElement('script');
+                        newScript.src     = src;
+                        newScript.onload  = resolve;
                         newScript.onerror = resolve;
                         document.body.appendChild(newScript);
                     }));
@@ -347,11 +351,11 @@ function loadPage(page) {
                        PASO 5: Todo listo → init + fade in
                        ---------------------------- */
                     Promise.all(imagePromises).then(() => {
-                        // Esperar a que la función init esté disponible (máx 2s)
-                        waitForInitAndRun(page);
                         requestAnimationFrame(() => {
                             mainContent.style.opacity = '1';
                         });
+                        // Dar un tick al navegador para ejecutar los scripts recién insertados
+                        setTimeout(() => waitForInitAndRun(page), 0);
                     });
                 });
             });
@@ -396,8 +400,7 @@ function initPageScripts(page) {
         window._autoReloadInterval = null;
     }
 
-    const initFn = PAGE_INIT_MAP[page];
-    if (initFn) initFn();
+    waitForInitAndRun(page);
 
     // Auto-recarga cada 5 min en reportes_rer
     if (page === '/reportes_rer') {
