@@ -399,21 +399,15 @@ def mark_deleted_solar_equipment():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-@app.route('/huinco')
+@app.route('/embalse_huinco')
 def huinco():
     try:
-        # Intentamos instanciar el lector. 
-        # Si tienes el connect_timeout=3, esto solo tardará 3s en fallar.
         reader = PresaHuincoReader()
-        
-        # Opcional: Intenta una consulta rápida para estar 100% seguros
         with reader.get_connection() as conn:
-            pass 
-            
+            pass
         return render_template('presa_huinco.html')
     except Exception as e:
-        # Si hay error de conexión, saltamos de inmediato a la página 500
-        print(f"Error detectado al cargar /huinco: {e}")
+        print(f"Error detectado al cargar /embalse_huinco: {e}")
         error_msg = "No se pudo establecer comunicación con el servidor de la Presa Huinco."
         return render_template('pagina500.html', error_code=503, error_detail=error_msg), 503
 
@@ -451,31 +445,26 @@ def get_data_fondo_huinco():
             return jsonify({'status': 'error', 'message': 'Error de conexión con base de datos'}), 503
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-@app.route('/tulumayo')
+@app.route('/embalse_tulumayo')
 def tulumayo():
     return render_template('tulumayo.html')
 
-@app.route('/matucana')
+@app.route('/pulmon_matucana')
 def matucana():
     return render_template('matucana.html')
 
 @app.route('/fondo_huinco')
 def fondo_huinco():
     try:
-        # Intentamos una conexión rápida (usando el timeout de 3s que configuramos)
         from lectura_presa_huinco import PresaHuincoReader
         reader = PresaHuincoReader()
-        
-        # Forzamos una pequeña validación real
         with reader.get_connection() as conn:
-            pass # Si llega aquí, la base de datos está viva
-            
+            pass
         return render_template('fondo_huinco.html')
     except Exception as e:
         print(f"Error de conexión en fondo_huinco: {e}")
-        # Si falla, lanzamos la página de error ANTES de que cargue el dashboard
-        return render_template('pagina500.html', 
-                               error_code=503, 
+        return render_template('pagina500.html',
+                               error_code=503,
                                error_detail="Error de comunicación con el sistema de compuertas."), 503
 
 @app.route('/bypass_huinco')

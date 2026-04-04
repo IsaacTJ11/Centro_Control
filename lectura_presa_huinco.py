@@ -1,9 +1,37 @@
-from lectura_db_wind import WindDataReader
+from db_pool import get_pool
+import psycopg2
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 
-class PresaHuincoReader(WindDataReader):
+from db_pool import get_pool
+import psycopg2
+import pandas as pd
+from datetime import datetime, timedelta
+from contextlib import contextmanager
+import numpy as np
+
+class PresaHuincoReader:
+
+    def __init__(self):
+        pass
+
+    @contextmanager
+    def get_connection(self):
+        pool = get_pool()
+        connection = None
+        try:
+            connection = pool.getconn()
+            yield connection
+        except psycopg2.Error as e:
+            print(f"Error de conexión: {e}")
+            if connection:
+                connection.rollback()
+            raise
+        finally:
+            if connection:
+                pool.putconn(connection)
+                
     # Dentro de tu clase en lectura_presa_huinco.py
     def get_datos_grafico(self):
         try:

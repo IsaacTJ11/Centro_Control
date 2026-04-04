@@ -224,4 +224,9 @@ function renderizarDashboard(actual, resultado) {
     } else {
         console.error("No se encontró el elemento #chart-nivel-huinco");
     }
+
+    // Auto-init en carga directa (no SPA)
+    if (document.querySelector('#chart-nivel-huinco')) {
+        window.initEmbalse?.();
+    }
 }

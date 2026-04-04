@@ -24,22 +24,22 @@
             const path = window.location.pathname;
 
             const routeMap = {
-                '/huinco':          { submenu: 'embalse',            page: '/huinco' },
-                '/tulumayo':        { submenu: 'embalse',            page: '/tulumayo' },
-                '/matucana':        { submenu: 'embalse',            page: '/matucana' },
-                '/fondo_huinco':    { submenu: 'regulacion',         page: '/fondo_huinco' },
-                '/bypass_huinco':   { submenu: 'regulacion',         page: '/bypass_huinco' },
-                '/toma_moyopampa':  { submenu: 'regulacion',         page: '/toma_moyopampa' },
-                '/costo-marginal':  { submenu: 'coes',               page: '/costo-marginal' },
-                '/despacho':        { submenu: 'coes',               page: '/despacho' },
-                '/rsf':             { submenu: 'coes',               page: '/rsf' },
-                '/rpf':             { submenu: 'coes',               page: '/rpf' },
-                '/indis-semanal':   { submenu: 'indisponibilidades', page: '/indis-semanal' },
-                '/indis-diaria':    { submenu: 'indisponibilidades', page: '/indis-diaria' },
-                '/reportes_rer':    { submenu: 'reportes-rer',       page: '/reportes_rer' },
-                '/recurso-diario':  { submenu: 'reportes-rer',       page: '/recurso-diario' },
-                '/vertimiento':     { submenu: 'reportes-rer',       page: '/vertimiento' },
-                '/estado-hydro':    { submenu: 'reportes-hydro',     page: '/estado-hydro' },
+                '/embalse_huinco':    { submenu: 'embalse',    page: '/embalse_huinco' },
+                '/embalse_tulumayo':  { submenu: 'embalse',    page: '/embalse_tulumayo' },
+                '/pulmon_matucana':   { submenu: 'embalse',    page: '/pulmon_matucana' },
+                '/fondo_huinco':      { submenu: 'regulacion', page: '/fondo_huinco' },
+                '/bypass_huinco':     { submenu: 'regulacion', page: '/bypass_huinco' },
+                '/toma_moyopampa':    { submenu: 'regulacion', page: '/toma_moyopampa' },
+                '/costo-marginal':    { submenu: 'coes',        page: '/costo-marginal' },
+                '/despacho':          { submenu: 'coes',        page: '/despacho' },
+                '/rsf':               { submenu: 'coes',        page: '/rsf' },
+                '/rpf':               { submenu: 'coes',        page: '/rpf' },
+                '/indis-semanal':     { submenu: 'indisponibilidades', page: '/indis-semanal' },
+                '/indis-diaria':      { submenu: 'indisponibilidades', page: '/indis-diaria' },
+                '/reportes_rer':      { submenu: 'reportes-rer',       page: '/reportes_rer' },
+                '/recurso-diario':    { submenu: 'reportes-rer',       page: '/recurso-diario' },
+                '/vertimiento':       { submenu: 'reportes-rer',       page: '/vertimiento' },
+                '/estado-hydro':      { submenu: 'reportes-hydro',     page: '/estado-hydro' },
             };
 
             const match = routeMap[path];
@@ -85,13 +85,13 @@
             <i class="fas fa-chevron-down submenu-arrow"></i>
         </div>
         <div class="submenu" id="embalse-submenu">
-            <div class="submenu-item" data-page="/huinco">
+            <div class="submenu-item" data-page="/embalse_huinco">
                 <span class="menu-text">Presa Huinco</span>
             </div>
-            <div class="submenu-item" data-page="/tulumayo">
+            <div class="submenu-item" data-page="/embalse_tulumayo">
                 <span class="menu-text">Presa Tulumayo</span>
             </div>
-            <div class="submenu-item" data-page="/matucana">
+            <div class="submenu-item" data-page="/pulmon_matucana">
                 <span class="menu-text">Pulmón Matucana</span>
             </div>
         </div>

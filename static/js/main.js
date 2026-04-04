@@ -347,13 +347,13 @@ window.addEventListener('popstate', function (e) {
    4.1 Mapa de página → función init
    ---------------------------- */
 const PAGE_INIT_MAP = {
-    '/rpf':           () => window.initRpf?.(),
-    '/huinco':        () => window.initEmbalse?.(),
-    '/tulumayo':      () => window.initEmbalse?.(),
-    '/matucana':      () => window.initEmbalse?.(),
-    '/fondo_huinco':  () => window.initCompuertas?.(),
-    '/bypass_huinco': () => window.initCompuertas?.(),
-    '/reportes_rer':  () => window.initReportes?.(),
+    '/rpf':               () => window.initRpf?.(),
+    '/embalse_huinco':    () => window.initEmbalse?.(),
+    '/embalse_tulumayo':  () => window.initEmbalse?.(),
+    '/pulmon_matucana':   () => window.initEmbalse?.(),
+    '/fondo_huinco':      () => window.initCompuertas?.(),
+    '/bypass_huinco':     () => window.initCompuertas?.(),
+    '/reportes_rer':      () => window.initReportes?.(),
 };
 
 /* ----------------------------
