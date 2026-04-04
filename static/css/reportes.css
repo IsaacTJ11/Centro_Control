@@ -98,14 +98,14 @@
     color: #333;
     text-align: center;
     font-size: 10px;
-    flex: 0 0 80px;
+    flex: 0 0 75px;
 }
 
 .equipment-time {
     color: #666;
     padding-left: 5px;
     font-size: 11px;
-    flex: 0 0 65px;
+    flex: 0 0 60px;
 }
 
 .equipment-report {
@@ -113,7 +113,7 @@
     text-align: center;
     font-size: 9px;
     font-weight: 500;
-    flex: 0 0 40px;
+    flex: 0 0 48px;
 }
 
 .equipment-status {
@@ -238,11 +238,15 @@
    3. SIDEBAR
    ============================================================ */
 /* ----------------------------
-   3.1 Sidebar colapsado
+   3.1 Sidebar desplegado
    ---------------------------- */
 .main-content:not(.expanded) .equipment-name {
     flex: 0 0 40px;
     font-size: 11px;
+}
+
+[data-tecnologia="solar"] .main-content:not(.expanded) .equipment-name {
+    flex: 0 0 40px;
 }
 
 .main-content:not(.expanded) .equipment-fecha {
@@ -252,22 +256,22 @@
 
 .main-content:not(.expanded) .equipment-time {
     flex: 0 0 50px;
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .main-content:not(.expanded) .equipment-report {
-    flex: 0 0 32px;
-    font-size: 8px;
+    flex: 0 0 48px;
+    font-size: 9px;
 }
 
 .main-content:not(.expanded) .equipment-item {
-    gap: 6px;
-    padding: 4px;
+    gap: 10px;
+    padding: 5px;
 }
 
 .main-content:not(.expanded) .j5-badge {
     min-width: 15px;
-    font-size: 7.5px;
+    font-size: 9px;
     padding: 2px 4px;
 }
 
@@ -935,7 +939,7 @@
 }
 
 .equipment-list:empty::after {
-    content: 'No hay equipos en FALLA/MANTENIMIENTO';
+    content: 'No hay equipos con anomalías';
     display: block;
     text-align: center;
     padding: 20px;
@@ -1043,9 +1047,8 @@
     to   { transform: rotate(360deg); }
 }
 
-
 /* ============================================================
-   9. RESPONSIVE
+   9. RESPONSIVE PANTALLAS 
    ============================================================ */
 
 /* ----------------------------
@@ -1063,19 +1066,25 @@
     }
 
     .equipment-name {
-        flex: 0 0 52px;
+        flex: 0 0 58px;
+        font-size: 13px;
     }
 
     .equipment-fecha {
-        flex: 0 0 95px;
+        flex: 0 0 90px;
+        font-size: 11px;
+        padding: 6px;
     }
 
     .equipment-time {
-        flex: 0 0 58px;
+        flex: 0 0 68px;
+        font-size: 12px;
+        padding: 6px;
     }
 
     .equipment-report {
-        flex: 0 0 20px;
+        flex: 0 0 52px;
+        font-size: 11px;
     }
 
     .status-indicator {
@@ -1084,13 +1093,14 @@
     }
 
     .j5-badge {
-        min-width: 16px;
-        padding: 2px 4px;
-        flex: 0 0 20px;
+        min-width: 20px;
+        padding: 2px 5px;
+        font-size: 10px;
+        flex: 0 0 52px;
     }
 
     [data-tecnologia="solar"] .equipment-name {
-        flex: 0 0 55px;
+        flex: 0 0 58px;
     }
 }
 
@@ -1099,73 +1109,39 @@
    ---------------------------------------------------- */
 @media (min-width: 1600px) {
     .main-content:not(.expanded) .equipment-name {
-        flex: 0 0 52px;
+        flex: 0 0 58px;
+        font-size: 13px;
     }
 
     .main-content:not(.expanded) .equipment-fecha {
-        flex: 0 0 80px;
+        flex: 0 0 90px;
+        font-size: 11px;
     }
 
     .main-content:not(.expanded) .equipment-time {
-        flex: 0 0 55px;
+        flex: 0 0 68px;
+        font-size: 12px;
     }
 
     .main-content:not(.expanded) .equipment-report {
-        flex: 0 0 20px;
+        flex: 0 0 52px;
+        font-size: 11px;
     }
 
     .main-content:not(.expanded) .equipment-item {
-        gap: 8px;
-        padding: 5px;
+        gap: 12px;
+        padding: 6px;
     }
 
     .main-content:not(.expanded) .j5-badge {
-        flex: 0 0 20px;
+        flex: 0 0 52px;
+        font-size: 10px;
+        padding: 2px 5px;
     }
 
     .main-content:not(.expanded) [data-tecnologia="solar"] .equipment-name {
-        flex: 0 0 55px;
+        flex: 0 0 58px;
     }
-}
-
-/* ----------------------------------------------------
-   9.3 Pantallas grandes ≥1600px con sidebar colapsado
-   ---------------------------------------------------- */
-.main-content:not(.expanded) .equipment-name {
-    flex: 0 0 40px;
-    font-size: 11px;
-}
-
-.main-content:not(.expanded) .equipment-fecha {
-    flex: 0 0 70px;
-    font-size: 9px;
-}
-
-.main-content:not(.expanded) .equipment-time {
-    flex: 0 0 50px;
-    font-size: 10px;
-}
-
-.main-content:not(.expanded) .equipment-report {
-    flex: 0 0 20px;
-    font-size: 8px;
-}
-
-.main-content:not(.expanded) .equipment-item {
-    gap: 6px;
-    padding: 4px;
-}
-
-.main-content:not(.expanded) .j5-badge {
-    min-width: 15px;
-    font-size: 7.5px;
-    padding: 2px 4px;
-    flex: 0 0 20px;
-}
-
-.main-content:not(.expanded) [data-tecnologia="solar"] .equipment-name {
-    flex: 0 0 45px;
-    font-size: 11px;
 }
 
 /* ----------------------------
