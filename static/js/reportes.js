@@ -1021,7 +1021,9 @@ function toggleTipoFilter(button) {
    ---------------------------- */
 function applyAllFilters() {
     const filterState = getFilterState();
-    const allItems    = document.querySelectorAll('.equipment-item');
+    const allItems = document.querySelectorAll(
+    '#aerogeneradores-wayra-i .equipment-item, #aerogeneradores-wayra-ext .equipment-item'
+);
 
     allItems.forEach(item => {
         const isOk           = item.classList.contains('ok');

@@ -1062,7 +1062,7 @@
 
     .equipment-item {
         gap: 12px;
-        padding: 6px;
+        padding: 4px;
     }
 
     .equipment-name {
@@ -1073,13 +1073,13 @@
     .equipment-fecha {
         flex: 0 0 90px;
         font-size: 11px;
-        padding: 6px;
+        /* padding: 6px; */
     }
 
     .equipment-time {
-        flex: 0 0 68px;
+        flex: 0 0 75px;
         font-size: 12px;
-        padding: 6px;
+        /* padding: 6px; */
     }
 
     .equipment-report {
