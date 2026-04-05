@@ -1,91 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Regulación - Compuerta de Fondo Huinco{% endblock %}
+{% block title %}Centro de Control - Costo Marginal{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/compuertas.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/coes.css') }}">
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/compuertas.js') }}"></script>
+<script src="{{ url_for('static', filename='js/coes.js') }}"></script>
 {% endblock %}
 
+
 {% block content %}
+
 <div class="page-title">
-    <i class="fas fa-gears"></i>
-    Regulación Compuerta de Fondo - Huinco
+    <i class="fas fa-chart-line"></i>
+    Costo Marginal
 </div>
 
 <div class="two-column">
     <div class="status-card">
         <div class="card-header">
-            <i class="fas fa-sliders-h"></i>
-            Control de Apertura <span id="hora-actuales"></span>
+            <i class="fas fa-tachometer-alt"></i>
+            <!-- Valores Actuales <span id="hora-actuales-cmg"></span> -->
         </div>
-        <div class="card-body">
-            <div class="equipment-section">
-                <div class="metric-row">
-                    <span class="metric-label">Apertura Actual:</span>
-                    <input id="val-apertura" type="text" class="metric-value" readonly aria-label="Apertura actual">
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Caudal Calculado:</span>
-                    <input id="val-caudal-comp" type="text" class="metric-value" readonly aria-label="Caudal por compuerta">
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Nivel de Embalse:</span>
-                    <input id="val-nivel-ref" type="text" class="metric-value" readonly aria-label="Nivel de referencia">
-                </div>
-                
-                <div class="metric-row">
-                    <button class="btn btn-primary" onclick="window.location.href='/embalse_huinco'">
-                        <i class="fas fa-arrow-left"></i> Volver a Presa Huinco
-                    </button>
-                </div>
-                <div class="metric-row">
-                    <button class="btn btn-primary" id="btn-actualizar-manual">
-                        <i class="fas fa-sync"></i> Forzar Actualización
-                    </button>
-                </div>
-            </div>
+        <div class="card-body" id="cmg-valores-actuales">
+            <!-- Pendiente de implementación -->
         </div>
     </div>
 
     <div class="status-card">
         <div class="card-header">
-            <i class="fas fa-chart-line"></i>
-            Histórico de Apertura vs Caudal
+            <i class="fas fa-chart-area"></i>
+            CMg Santa Rosa
         </div>
         <div class="card-body">
-            <div id="chart-compuerta-fondo"></div>
-        </div>
-    </div>
-</div>
-
-<div class="one-column">
-    <div class="status-card">
-        <div class="card-header">
-            <i class="fas fa-history"></i>
-            Registro de Movimientos Recientes
-        </div>
-        <div class="card-body">
-            <div class="table-container">
-                <table class="actions-table">
-                    <thead>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Apertura (%)</th>
-                            <th>Caudal (m³/s)</th>
-                            <th>Usuario/Sistema</th>
-                        </tr>
-                    </thead>
-                    <tbody id="registro-movimientos-tbody">
-                        </tbody>
-                </table>
-            </div>
+            <div id="chart-cmg-santa-rosa"></div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 {% endblock %}

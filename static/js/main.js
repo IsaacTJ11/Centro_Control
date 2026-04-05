@@ -227,6 +227,7 @@ function waitForInitAndRun(page, attempts = 0) {
         '/bypass_huinco':    () => typeof window.initCompuertas === 'function',
         '/rpf':              () => typeof window.initRpf        === 'function',
         '/reportes_rer':     () => typeof window.initReportes   === 'function',
+        '/costo-marginal':   () => typeof window.initCoes === 'function',
     };
 
     const isReady = fnReady[page];
@@ -387,6 +388,7 @@ const PAGE_INIT_MAP = {
     '/fondo_huinco':      () => window.initCompuertas?.(),
     '/bypass_huinco':     () => window.initCompuertas?.(),
     '/reportes_rer':      () => window.initReportes?.(),
+    '/costo-marginal':    () => window.initCoes?.(),
 };
 
 /* ----------------------------

@@ -479,9 +479,40 @@ def toma_moyopampa():
 def config_compuertas():
     return render_template('config_compuertas.html')
 
+# Reemplazar la ruta existente:
 @app.route('/costo-marginal')
 def costo_marginal():
     return render_template('costo_marginal.html')
+
+# Agregar nuevo endpoint API:
+@app.route('/api/data-cmg')
+def get_data_cmg():
+    try:
+        from lectura_presa_huinco import PresaHuincoReader
+        import pandas as pd
+        import numpy as np
+        from datetime import datetime, timedelta
+
+        reader = PresaHuincoReader()
+        with reader.get_connection() as conn:
+            hoy    = datetime.now().date()
+            manana = hoy + timedelta(days=1)
+            query  = """
+                SELECT fecha, cmg_santa_rosa
+                FROM public.despacho_hydro
+                WHERE fecha >= %s AND fecha < %s
+                ORDER BY fecha ASC
+            """
+            df = pd.read_sql_query(query, conn, params=[hoy, manana])
+            df['fecha'] = pd.to_datetime(df['fecha']).dt.strftime('%Y-%m-%dT%H:%M:%S')
+            df = df.where(pd.notnull(df), None)
+            return jsonify({'status': 'success', 'datos': df.to_dict(orient='records')})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()          # <-- ver error real en consola del servidor
+        if es_error_conexion(e):
+            return jsonify({'status': 'error', 'message': 'Error de conexión'}), 503
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/despacho')
 def despacho():

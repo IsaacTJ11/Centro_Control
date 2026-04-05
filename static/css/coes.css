@@ -2,11 +2,6 @@
    1. LAYOUT
    ============================================================ */
 
-/* ----------------------------
-   1.1 Columnas
-   ---------------------------- */
-
-/* Proporción 0.4fr 1fr — igual que embalses, específica de compuertas */
 .two-column {
     display: grid;
     grid-template-columns: 0.4fr 1fr;
@@ -20,11 +15,6 @@
     margin-bottom: 20px;
 }
 
-/* ----------------------------
-   1.2 Cards
-   ---------------------------- */
-
-/* styles.css define .card — fondo_huinco.html usa .status-card */
 .status-card {
     background: white;
     border-radius: 12px;
@@ -34,12 +24,9 @@
 
 
 /* ============================================================
-   2. CONTROL DE APERTURA (métricas)
+   2. MÉTRICAS
    ============================================================ */
 
-/* ----------------------------
-   2.1 Filas de métricas
-   ---------------------------- */
 .metric-row {
     display: flex;
     align-items: center;
@@ -58,11 +45,11 @@
     color: #333;
     font-size: 14px;
     font-weight: 600;
+    flex: 1;
 }
 
-/* Completo con todas las propiedades para consistencia con embalses.css */
 .metric-value {
-    width: 120px;
+    width: 140px;
     padding: 8px 12px;
     border: 2px solid #e0e0e0;
     border-radius: 6px;
@@ -73,80 +60,44 @@
     font-weight: 500;
 }
 
-/* ----------------------------
-   2.2 Botones de navegación en métricas
-   ---------------------------- */
-.metric-row button.btn {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-size: 14px;
-    padding: 10px 15px;
-}
-
-.metric-row button.btn i {
-    font-size: 16px;
-}
-
-/* Ancho completo específico de esta sección */
-.btn-primary {
-    width: 100%;
-    margin-top: 20px;
-}
-
 
 /* ============================================================
    3. GRÁFICO
    ============================================================ */
-#chart-compuerta-fondo {
+
+#chart-cmg-santa-rosa {
     min-height: 350px;
 }
 
-
-/* ============================================================
-   4. TABLA DE MOVIMIENTOS RECIENTES
-   ============================================================ */
-.actions-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.actions-table th,
-.actions-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e9ecef;
-}
-
-/* Encabezado verde — indica operatividad de la compuerta */
-.actions-table th {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.actions-table tbody tr:hover {
-    background: #f8f9fa;
-}
-
-.actions-table td {
-    font-size: 14px;
-    color: #333;
-}
-
-.actions-table tbody tr:last-child td {
-    border-bottom: none;
+/* Zona pendiente (card izquierda vacía) */
+#cmg-valores-actuales {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #bbb;
+    font-size: 13px;
+    font-style: italic;
 }
 
 
 /* ============================================================
-   5. RESPONSIVE
+   4. RESPONSIVE
    ============================================================ */
+
 @media (max-width: 992px) {
     .two-column {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .two-column {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    #chart-cmg-santa-rosa {
+        min-height: 260px;
     }
 }
