@@ -395,8 +395,6 @@ const PAGE_INIT_MAP = {
    4.2 Ejecutar init y limpiar intervalos anteriores
    ---------------------------- */
 function initPageScripts(page) {
-    // Limpiar solo el intervalo de auto-recarga de reportes
-    // Cada módulo (embalse, compuertas) gestiona su propio intervalo
     if (window._autoReloadInterval) {
         clearInterval(window._autoReloadInterval);
         window._autoReloadInterval = null;
@@ -404,10 +402,14 @@ function initPageScripts(page) {
 
     waitForInitAndRun(page);
 
-    // Auto-recarga cada 5 min en reportes_rer
     if (page === '/reportes_rer') {
         window._autoReloadInterval = setInterval(() => {
-            loadPage('/reportes_rer');
+            if (window.location.pathname === '/reportes_rer') {
+                loadPage('/reportes_rer');
+            } else {
+                clearInterval(window._autoReloadInterval);
+                window._autoReloadInterval = null;
+            }
         }, 5 * 60 * 1000);
     }
 }

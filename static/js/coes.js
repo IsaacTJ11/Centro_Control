@@ -23,10 +23,31 @@ window.initCoes = function () {
         const xMax  = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1, 0, 0, 0).getTime();
         const ahora = Date.now();
 
-        // Serie única con todos los puntos
         const serie = datos
             .filter(d => d.cmg_santa_rosa !== null && d.cmg_santa_rosa !== undefined)
             .map(d => [new Date(d.fecha).getTime(), parseFloat(d.cmg_santa_rosa)]);
+
+        // --- Cálculo de rango y división ---
+        const valores   = serie.map(d => d[1]);
+        const valMin    = valores.length ? Math.min(...valores) : 0;
+        const valMax    = valores.length ? Math.max(...valores) : 50;
+        const rango     = valMax - valMin;
+
+        // Determinar tamaño de división
+        const stepSize = valMax > 20 ? 10 : 5;
+
+        // Calcular yMin
+        let yMin;
+        if (valMin < 10) {
+            yMin = 0;
+        } else if (rango < 30) {
+            yMin = 0;
+        } else {
+            yMin = Math.floor(valMin / stepSize) * stepSize;
+        }
+
+        // Calcular yMax (siguiente múltiplo de stepSize por encima del máximo)
+        const yMax = Math.ceil(valMax / stepSize) * stepSize + stepSize;
 
         const options = {
             series: [{ name: 'CMg Santa Rosa', data: serie }],
@@ -70,8 +91,16 @@ window.initCoes = function () {
                 tickAmount: 12
             },
             yaxis: {
-                title: { text: '$ / MWh' },
-                labels: { formatter: val => val.toFixed(1) }
+                min: yMin,
+                max: yMax,
+                tickAmount: (yMax - yMin) / stepSize,
+                labels: { formatter: val => val.toFixed(1) },
+                title: { text: '$ / MWh' }
+            },
+            grid: {
+                yaxis: {
+                    lines: { show: true }
+                }
             },
             tooltip: {
                 x: { format: 'dd MMM HH:mm' },
@@ -86,7 +115,6 @@ window.initCoes = function () {
             new ApexCharts(contenedor, options).render();
         }
 
-        // Hora del último dato
         const ultimo = datos.filter(d => d.cmg_santa_rosa !== null).slice(-1)[0];
         const span   = document.getElementById('hora-actuales-cmg');
         if (span && ultimo) {

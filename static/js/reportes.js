@@ -53,7 +53,11 @@ window.initReportes = function () {
     /* ----------------------------
        1.5 Polling AJAX cada 1 minuto
        ---------------------------- */
-    setInterval(() => updateEquipmentData(), 60 * 1000);
+    setInterval(() => {
+        if (window.location.pathname === '/reportes_rer') {
+            updateEquipmentData();
+        }
+    }, 60 * 1000);
 };
 
 
@@ -77,16 +81,30 @@ function initializeEditListeners() {
             const nombreRaw = item.getAttribute('data-nombre-raw') || '';
             const tipoDisplay = tipo === 'MANT' ? 'MANTENIMIENTO' : tipo;
 
+            // Solo mostrar tooltip si no es un circuito ni una central
+            const esCircuito = nombreRaw.toUpperCase().startsWith('C-') 
+                || nombreRaw.toUpperCase() === 'RUBI' 
+                || nombreRaw.toUpperCase() === 'CLEMESI';
+
             const tooltip = document.createElement('div');
             tooltip.className = 'equipment-name-tooltip';
-            tooltip.innerHTML = `
-                <div class="tooltip-header">
-                    <span class="status-indicator status-${tipo}"></span>
-                    <span class="tooltip-tipo-text tipo-${tipo}">${tipoDisplay}</span>
-                </div>
-                ${nombreRaw ? `<div class="tooltip-circuito">${nombreRaw}</div>` : ''}
-                <div class="tooltip-circuito">C-${circuito.toString().padStart(2, '0')}</div>
-            `;
+
+            if (esCircuito) {
+                tooltip.innerHTML = `
+                    <div class="tooltip-header">
+                        <span class="status-indicator status-${tipo}"></span>
+                        <span class="tooltip-tipo-text tipo-${tipo}">${tipoDisplay}</span>
+                    </div>
+                `;
+            } else {
+                tooltip.innerHTML = `
+                    <div class="tooltip-header">
+                        <span class="status-indicator status-${tipo}"></span>
+                        <span class="tooltip-tipo-text tipo-${tipo}">${tipoDisplay}</span>
+                    </div>
+                    <div class="tooltip-circuito">C-${circuito.toString().padStart(2, '0')}</div>
+                `;
+            }
             name.appendChild(tooltip);
         }
     });

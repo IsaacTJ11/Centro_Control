@@ -414,19 +414,58 @@ def huinco():
 @app.route('/api/data-huinco')
 def get_data_huinco():
     try:
+        import math
         reader = PresaHuincoReader()
-        actual = reader.get_valores_actuales()
+        actual    = reader.get_valores_actuales()
         resultado = reader.get_datos_grafico_con_anotaciones()
-        
+
+        def limpiar_nan(obj):
+            if isinstance(obj, dict):
+                return {k: limpiar_nan(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [limpiar_nan(i) for i in obj]
+            elif isinstance(obj, float) and math.isnan(obj):
+                return None
+            return obj
+
         return jsonify({
-            'status': 'success',
-            'actual': actual,
-            'grafico': resultado
+            'status':  'success',
+            'actual':  limpiar_nan(actual),
+            'grafico': limpiar_nan(resultado)
         })
     except Exception as e:
         if es_error_conexion(e):
             return render_template('pagina500.html', error_code=503, error_detail=str(e)), 503
         raise
+
+@app.route('/cargar_config_compuertas', methods=['GET'])
+def cargar_config_compuertas():
+    try:
+        filepath = os.path.join('templates', 'config_compuertas_data.json')
+        if os.path.exists(filepath):
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return jsonify(data), 200
+        else:
+            return jsonify({'compuerta1': 'HABILITADA', 'compuerta2': 'HABILITADA'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/guardar_config_compuertas', methods=['POST'])
+def guardar_config_compuertas():
+    try:
+        data = request.get_json()
+        filepath = os.path.join('templates', 'config_compuertas_data.json')
+        config_data = {
+            'compuerta1': data['compuerta1'],
+            'compuerta2': data['compuerta2'],
+            'ultima_actualizacion': data['timestamp']
+        }
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(config_data, f, ensure_ascii=False, indent=2)
+        return jsonify({'status': 'success', 'mensaje': 'Configuración guardada'}), 200
+    except Exception as e:
+        return jsonify({'status': 'error', 'mensaje': str(e)}), 500
 
 @app.route('/api/data-fondo-huinco')
 def get_data_fondo_huinco():

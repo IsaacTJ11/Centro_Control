@@ -92,14 +92,30 @@ class SolarDataReader:
         Conserva el nombre original sin cambios (el prefijo R_/C_ ya comunica la central).
         Si el nombre es exactamente 'RUBI' o 'CLEMESI', retorna 'CENTRAL'.
         """
+        
         if not nombre:
             return nombre
         upper = nombre.upper()
         if upper in ('RUBI', 'CLEMESI'):
             return 'CENTRAL'
-        # Eliminar prefijo R_ o C_
         if upper.startswith('R_') or upper.startswith('C_'):
-            return nombre[2:]
+            sufijo = nombre[2:]
+            # Formatear CU o C- con padding de 2 dígitos
+            if sufijo.upper().startswith('CU'):
+                parte_texto = sufijo[:2]
+                parte_num   = sufijo[2:]
+                try:
+                    return parte_texto + str(int(parte_num)).zfill(2)
+                except ValueError:
+                    return sufijo
+            if sufijo.upper().startswith('C-'):
+                parte_texto = sufijo[:2]
+                parte_num   = sufijo[2:]
+                try:
+                    return parte_texto + str(int(parte_num)).zfill(2)
+                except ValueError:
+                    return sufijo
+            return sufijo
         return nombre
 
     def get_inversores_falla(self):
