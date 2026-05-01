@@ -122,15 +122,22 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', checkMobile);
 
     /* ----------------------------
-       1.6 Navegación SPA
-       ---------------------------- */
-    const navigationItems = document.querySelectorAll('[data-page]');
-    navigationItems.forEach(item => {
-        item.addEventListener('click', function (e) {
+   1.6 Navegación SPA (Corregida con Delegación)
+   ---------------------------- */
+    document.addEventListener('click', function (e) {
+        // Buscamos si el clic fue en un elemento con data-page o dentro de uno
+        const navItem = e.target.closest('[data-page]');
+        
+        if (navItem) {
             e.preventDefault();
-            const page = this.dataset.page;
-            if (page) loadPage(page);
-        });
+            const page = navItem.dataset.page;
+            if (page) {
+                // Evitar recargar si ya estamos en esa página
+                if (window.location.pathname !== page) {
+                    loadPage(page);
+                }
+            }
+        }
     });
 
     /* ----------------------------

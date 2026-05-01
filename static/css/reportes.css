@@ -939,7 +939,7 @@
 }
 
 .equipment-list:empty::after {
-    content: 'No hay equipos con anomalías';
+    /* content: 'No hay equipos con anomalías'; */
     display: block;
     text-align: center;
     padding: 20px;
