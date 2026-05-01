@@ -44,12 +44,72 @@
 .home-card p {
     color: #666;
     line-height: 1.6;
-    margin-bottom: 15px;
 }
 
+/* ============================================================
+   3. CARD LINKS (hover reveal)
+   ============================================================ */
+.card-desc {
+    transition: opacity 0.2s ease, max-height 0.25s ease;
+    max-height: 80px;
+    overflow: hidden;
+    opacity: 1;
+}
+
+.card-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease, max-height 0.25s ease;
+}
+
+.home-card:hover .card-desc {
+    max-height: 0;
+    opacity: 0;
+}
+
+.home-card:hover .card-links {
+    max-height: 200px;
+    opacity: 1;
+}
+
+.card-links li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #555;
+}
+
+.card-links li:last-child {
+    border-bottom: none;
+}
+
+.card-links li i {
+    color: #ff6b35;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.card-links li a {
+    color: #555;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    width: 100%;
+}
+
+.card-links li a:hover {
+    color: #ff6b35;
+}
 
 /* ============================================================
-   3. RESPONSIVE
+   4. RESPONSIVE
    ============================================================ */
 
 /* ----------------------------
@@ -103,3 +163,4 @@
         margin-bottom: 10px;
     }
 }
+
