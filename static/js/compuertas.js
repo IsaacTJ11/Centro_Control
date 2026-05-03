@@ -122,15 +122,6 @@ window.initCompuertas = function () {
     fetchData();
     window._compuertasInterval = setInterval(fetchData, 5 * 60 * 1000);
 
-    /* ----------------------------
-        Config compuertas — listener del ícono
-        ---------------------------- */
-    document.addEventListener('click', function _configClick(e) {
-        if (e.target && e.target.id === 'btn-config-compuertas') {
-            abrirConfigCompuertas();
-        }
-    });
-
 };
 
 /* ============================================================
@@ -150,52 +141,48 @@ function abrirConfigCompuertas() {
                 <h3>Compuertas de fondo</h3>
             </div>
 
-            <div class="edit-form-group">
-                <label class="edit-form-label">Compuerta fondo 1:</label>
-                <div class="edit-tipo-select-wrapper" style="display:flex;align-items:center;gap:8px;">
+            <div class="comp-config-group">
+                <div class="comp-config-title">
+                    <span class="edit-form-label">Compuerta fondo 1:</span>
                     <span class="status-indicator-comp" id="indicator-comp1"></span>
-                    <span class="edit-tipo-text" id="text-comp1" style="flex:1;">HABILITADA</span>
-                    <label style="font-size:12px;color:#555;white-space:nowrap;">Estado</label>
-                    <select class="edit-tipo-select-inline" id="select-comp1">
+                    <span class="comp-estado-text" id="text-comp1"></span>
+                </div>
+                <div class="comp-config-row">
+                    <label class="comp-row-label">Estado</label>
+                    <select class="comp-select" id="select-comp1">
                         <option value="HABILITADA">HABILITADA</option>
                         <option value="DESHABILITADA">DESHABILITADA</option>
                     </select>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
-                    <label style="font-size:12px;color:#555;white-space:nowrap;font-weight:600;">Nivel 0</label>
-                    <div style="display:flex;align-items:center;gap:4px;flex:1;">
-                        <input type="number" id="nivel0-comp1" step="0.1"
-                               style="width:90px;padding:6px 8px;border:2px solid #e0e0e0;border-radius:6px;font-size:13px;text-align:right;"
-                               value="-8">
-                        <span style="font-size:12px;color:#666;">cm</span>
-                    </div>
+                <div class="comp-config-row">
+                    <label class="comp-row-label">Nivel 0</label>
+                    <input type="number" id="nivel0-comp1" class="comp-nivel-input" step="0.1" value="-8">
+                    <span class="comp-unidad">cm</span>
                 </div>
             </div>
 
-            <div class="edit-form-group">
-                <label class="edit-form-label">Compuerta fondo 2:</label>
-                <div class="edit-tipo-select-wrapper" style="display:flex;align-items:center;gap:8px;">
+            <div class="comp-config-group">
+                <div class="comp-config-title">
+                    <span class="edit-form-label">Compuerta fondo 2:</span>
                     <span class="status-indicator-comp" id="indicator-comp2"></span>
-                    <span class="edit-tipo-text" id="text-comp2" style="flex:1;">HABILITADA</span>
-                    <label style="font-size:12px;color:#555;white-space:nowrap;">Estado</label>
-                    <select class="edit-tipo-select-inline" id="select-comp2">
+                    <span class="comp-estado-text" id="text-comp2"></span>
+                </div>
+                <div class="comp-config-row">
+                    <label class="comp-row-label">Estado</label>
+                    <select class="comp-select" id="select-comp2">
                         <option value="HABILITADA">HABILITADA</option>
                         <option value="DESHABILITADA">DESHABILITADA</option>
                     </select>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
-                    <label style="font-size:12px;color:#555;white-space:nowrap;font-weight:600;">Nivel 0</label>
-                    <div style="display:flex;align-items:center;gap:4px;flex:1;">
-                        <input type="number" id="nivel0-comp2" step="0.1"
-                               style="width:90px;padding:6px 8px;border:2px solid #e0e0e0;border-radius:6px;font-size:13px;text-align:right;"
-                               value="-8">
-                        <span style="font-size:12px;color:#666;">cm</span>
-                    </div>
+                <div class="comp-config-row">
+                    <label class="comp-row-label">Nivel 0</label>
+                    <input type="number" id="nivel0-comp2" class="comp-nivel-input" step="0.1" value="-8">
+                    <span class="comp-unidad">cm</span>
                 </div>
             </div>
 
             <div class="edit-buttons">
-                <button class="btn btn-primary" id="btn-actualizar-config">
+                <button class="btn btn-primary comp-btn-actualizar" id="btn-actualizar-config">
                     <i class="fas fa-check"></i> Actualizar
                 </button>
             </div>
@@ -207,9 +194,7 @@ function abrirConfigCompuertas() {
     function actualizarEstadoComp(select, text, indicator) {
         const val = select.value;
         text.textContent = val;
-        text.className = val === 'HABILITADA'
-            ? 'edit-tipo-text comp-habilitada'
-            : 'edit-tipo-text comp-deshabilitada';
+        text.className   = val === 'HABILITADA' ? 'comp-estado-text comp-habilitada' : 'comp-estado-text comp-deshabilitada';
         indicator.className = val === 'HABILITADA'
             ? 'status-indicator-comp comp-indicator-habilitada'
             : 'status-indicator-comp comp-indicator-deshabilitada';
@@ -230,10 +215,10 @@ function abrirConfigCompuertas() {
     fetch('/cargar_config_compuertas')
         .then(r => r.json())
         .then(data => {
-            select1.value   = data.compuerta1  || 'HABILITADA';
-            select2.value   = data.compuerta2  || 'HABILITADA';
-            nivel0_1.value  = data.nivel0_comp1 !== undefined ? data.nivel0_comp1 : -8;
-            nivel0_2.value  = data.nivel0_comp2 !== undefined ? data.nivel0_comp2 : -8;
+            select1.value  = data.compuerta1   || 'HABILITADA';
+            select2.value  = data.compuerta2   || 'HABILITADA';
+            nivel0_1.value = data.nivel0_comp1 !== undefined ? data.nivel0_comp1 : -8;
+            nivel0_2.value = data.nivel0_comp2 !== undefined ? data.nivel0_comp2 : -8;
             actualizarEstadoComp(select1, text1, indicator1);
             actualizarEstadoComp(select2, text2, indicator2);
         })
@@ -283,4 +268,14 @@ function guardarConfigCompuertas(comp1, comp2, nivel0_1, nivel0_2) {
             }
         })
         .catch(() => showNotification('Error de conexión al guardar', 'error'));
+}
+
+/* Listener único — se registra una sola vez aunque initCompuertas corra varias veces */
+if (!window._configCompuertasListenerRegistered) {
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.closest('#btn-config-compuertas')) {
+            abrirConfigCompuertas();
+        }
+    });
+    window._configCompuertasListenerRegistered = true;
 }
