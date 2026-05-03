@@ -52,13 +52,16 @@ class PresaHuincoReader:
             return []
 
     def get_valores_actuales(self):
-        """Obtiene el último registro con nivel_presa no null"""
+        """Obtiene el registro más cercano a la hora actual con nivel_presa no null"""
         try:
             with self.get_connection() as conn:
                 query = """
                     SELECT * FROM public.presa_huinco 
                     WHERE nivel_presa IS NOT NULL 
-                    ORDER BY fecha DESC 
+                    ORDER BY ABS(EXTRACT(EPOCH FROM (fecha - date_trunc('hour', NOW()) + 
+                        CASE WHEN EXTRACT(MINUTE FROM NOW()) < 30 
+                            THEN INTERVAL '0 minutes' 
+                            ELSE INTERVAL '30 minutes' END)))
                     LIMIT 1
                 """
                 df = pd.read_sql_query(query, conn)
@@ -66,7 +69,6 @@ class PresaHuincoReader:
                     data = df.iloc[0].to_dict()
                     if isinstance(data['fecha'], datetime):
                         data['fecha'] = data['fecha'].strftime('%Y-%m-%d %H:%M:%S')
-                    # Convertir NaN a None para JSON válido
                     for k, v in data.items():
                         if isinstance(v, float) and np.isnan(v):
                             data[k] = None

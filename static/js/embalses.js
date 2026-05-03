@@ -83,21 +83,27 @@ function renderizarDashboard(actual, resultado) {
     // Calcular rango X basado en el último dato real disponible
     let xMin = undefined;
     let xMax = undefined;
-    const seisHoras = 6  * 60 * 60 * 1000;
-    const doceHoras = 12 * 60 * 60 * 1000;
+    const seisHoras = 6 * 60 * 60 * 1000;
 
     const ultimoConEntrada = datosLimpios
         .slice()
         .reverse()
         .find(d => d.caudal_entrada !== null && d.caudal_entrada !== undefined);
 
-    // "Ahora" = Date.now() si existe en los datos, sino el último dato real disponible
     const ahoraMs = ultimoConEntrada
         ? Math.min(Date.now(), ultimoConEntrada.x)
         : Date.now();
 
+    // Calcular tiempo hasta las 00:00 de mañana
+    const manana = new Date();
+    manana.setDate(manana.getDate() + 1);
+    manana.setHours(0, 0, 0, 0);
+    const msHastaManana = manana.getTime() - Date.now();
+    const doceHoras = 12 * 60 * 60 * 1000;
+    const tiempoFuturo = msHastaManana < doceHoras ? msHastaManana : doceHoras;
+
     xMin = ahoraMs - seisHoras;
-    xMax = ahoraMs + doceHoras;
+    xMax = msHastaManana < doceHoras ? manana.getTime() : ahoraMs + doceHoras;
 
     // Inicio zona predicción: último dato real redondeado a 30 min
     const basePrediccion = ultimoConEntrada ? new Date(ultimoConEntrada.x) : new Date(ahoraMs);
