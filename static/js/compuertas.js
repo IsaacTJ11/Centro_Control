@@ -23,70 +23,228 @@ window.initCompuertas = function () {
 
     function renderDashboard(actual, historico) {
 
-        /* ----------------------------
-           2.1 Valores actuales
-           ---------------------------- */
-        const f = (val) => (val != null) ? parseFloat(val).toFixed(2) : "0.00";
-
+        /* 2.1 Valores actuales */
         if (actual) {
-            document.getElementById('val-apertura').value   = f(actual.apertura)       + " %";
+            const f = (val) => (val != null) ? parseFloat(val).toFixed(2) : "0.00";
+            document.getElementById('val-apertura').value    = f(actual.apertura)      + " %";
             document.getElementById('val-caudal-comp').value = f(actual.caudal)        + " m³/s";
-            document.getElementById('val-nivel-ref').value  = f(actual.nivel_embalse)  + " msnm";
+            document.getElementById('val-nivel-ref').value   = f(actual.nivel_embalse) + " msnm";
 
             const fecha = new Date(actual.fecha);
             document.getElementById('hora-actuales').textContent =
-                `(${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')})`;
+                `(${fecha.getHours().toString().padStart(2,'0')}:${fecha.getMinutes().toString().padStart(2,'0')})`;
         }
 
-        /* ----------------------------
-           2.2 Configuración y render ApexCharts
-           ---------------------------- */
+        /* 2.2 Series */
+        const serieComp1 = historico.map(d => ({
+            x: new Date(d.fecha).getTime(),
+            y: d.comp_fondo_1 != null ? parseFloat(d.comp_fondo_1) : null
+        }));
+        const serieComp2 = historico.map(d => ({
+            x: new Date(d.fecha).getTime(),
+            y: d.comp_fondo_2 != null ? parseFloat(d.comp_fondo_2) : null
+        }));
+        const serieCaudal = historico.map(d => ({
+            x: new Date(d.fecha).getTime(),
+            y: d.caudal_descarga != null ? parseFloat(d.caudal_descarga) : null
+        }));
 
-        // stroke: 'step' representa cambios discretos de apertura de compuerta
+        /* 2.3 Calcular escalas iniciales con todos los datos */
+        const allComp = historico.flatMap(d => [
+            d.comp_fondo_1 != null ? parseFloat(d.comp_fondo_1) : null,
+            d.comp_fondo_2 != null ? parseFloat(d.comp_fondo_2) : null
+        ]).filter(v => v != null);
+        const allCaudal = historico
+            .map(d => d.caudal_descarga != null ? parseFloat(d.caudal_descarga) : null)
+            .filter(v => v != null);
+
+        function calcCompScale(maxVal) {
+            const yMax  = maxVal > 0 ? maxVal * 2 : 10;
+            const step  = yMax <= 30 ? 5 : 10;
+            return { min: 0, max: Math.ceil(yMax / step) * step, tickAmount: Math.ceil(yMax / step) };
+        }
+        function calcCaudalScale(maxVal, compYMax) {
+            const yMax  = maxVal > 0 ? Math.ceil(maxVal / 5) * 5 + 5 : 10;
+            const step  = compYMax <= 30 ? 5 : 10;
+            return { min: 0, max: Math.ceil(yMax / step) * step, tickAmount: Math.ceil(yMax / step) };
+        }
+
+        const maxComp0   = allComp.length   ? Math.max(...allComp)   : 0;
+        const maxCaudal0 = allCaudal.length ? Math.max(...allCaudal) : 0;
+        const compScale0   = calcCompScale(maxComp0);
+        const caudalScale0 = calcCaudalScale(maxCaudal0, compScale0.max);
+
+        /* 2.4 Formateo eje X — igual que embalse_huinco */
+        const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+        /* 2.5 Opciones */
         const options = {
             series: [
-                {
-                    name: 'Apertura (%)',
-                    data: historico.map(d => ({
-                        x: new Date(d.fecha).getTime(),
-                        y: d.apertura
-                    }))
-                },
-                {
-                    name: 'Caudal (m³/s)',
-                    data: historico.map(d => ({
-                        x: new Date(d.fecha).getTime(),
-                        y: d.caudal
-                    }))
-                }
+                { name: 'Comp. Fondo 1 (%)', type: 'line', data: serieComp1 },
+                { name: 'Comp. Fondo 2 (%)', type: 'line', data: serieComp2 },
+                { name: 'Q. al río (m³/s)',  type: 'area', data: serieCaudal }
             ],
             chart: {
-                type: 'area',
                 height: 350,
-                toolbar: { show: true }
-            },
-            colors: ['#ff6b35', '#20c997'],
-            dataLabels: { enabled: false },
-            stroke: { curve: 'step' },
-            xaxis: { type: 'datetime' },
-            yaxis: [
-                {
-                    title: { text: "Apertura %" },
-                    min: 0,
-                    max: 100
-                },
-                {
-                    opposite: true,
-                    title: { text: "Caudal m³/s" }
+                type: 'line',
+                animations: { enabled: false },
+                toolbar: { show: true },
+                zoom: { type: 'x', enabled: true, autoScaleYaxis: false },
+                events: {
+                    zoomed: function(chartCtx, { xaxis }) {
+                        // Recalcular escalas con los datos visibles en el zoom
+                        const x0 = xaxis.min;
+                        const x1 = xaxis.max;
+                        const visible = historico.filter(d => {
+                            const t = new Date(d.fecha).getTime();
+                            return t >= x0 && t <= x1;
+                        });
+
+                        const visComp = visible.flatMap(d => [
+                            d.comp_fondo_1 != null ? parseFloat(d.comp_fondo_1) : null,
+                            d.comp_fondo_2 != null ? parseFloat(d.comp_fondo_2) : null
+                        ]).filter(v => v != null);
+                        const visCaudal = visible
+                            .map(d => d.caudal_descarga != null ? parseFloat(d.caudal_descarga) : null)
+                            .filter(v => v != null);
+
+                        const maxC  = visComp.length   ? Math.max(...visComp)   : maxComp0;
+                        const maxQ  = visCaudal.length ? Math.max(...visCaudal) : maxCaudal0;
+                        const csNew = calcCompScale(maxC);
+                        const qsNew = calcCaudalScale(maxQ, csNew.max);
+
+                        chartCtx.updateOptions({
+                            yaxis: buildYAxis(csNew, qsNew)
+                        }, false, false);
+                    },
+                    beforeResetZoom: function() {
+                        return { xaxis: {} };  // ApexCharts restaura el zoom original
+                    },
+                    scrolled: function(chartCtx, { xaxis }) {
+                        // mismo recálculo al hacer scroll
+                        const x0 = xaxis.min;
+                        const x1 = xaxis.max;
+                        const visible = historico.filter(d => {
+                            const t = new Date(d.fecha).getTime();
+                            return t >= x0 && t <= x1;
+                        });
+
+                        const visComp = visible.flatMap(d => [
+                            d.comp_fondo_1 != null ? parseFloat(d.comp_fondo_1) : null,
+                            d.comp_fondo_2 != null ? parseFloat(d.comp_fondo_2) : null
+                        ]).filter(v => v != null);
+                        const visCaudal = visible
+                            .map(d => d.caudal_descarga != null ? parseFloat(d.caudal_descarga) : null)
+                            .filter(v => v != null);
+
+                        const maxC  = visComp.length   ? Math.max(...visComp)   : maxComp0;
+                        const maxQ  = visCaudal.length ? Math.max(...visCaudal) : maxCaudal0;
+                        const csNew = calcCompScale(maxC);
+                        const qsNew = calcCaudalScale(maxQ, csNew.max);
+
+                        chartCtx.updateOptions({
+                            yaxis: buildYAxis(csNew, qsNew)
+                        }, false, false);
+                    }
                 }
-            ],
-            tooltip: { x: { format: 'dd MMM HH:mm' } }
+            },
+            colors: ['#ff6b35', '#764ba2', '#20c997'],
+            dataLabels: { enabled: false },
+            stroke: {
+                curve: 'stepline',
+                width: [2, 2, 2]
+            },
+            fill: {
+                type: ['solid', 'solid', 'gradient'],
+                gradient: {
+                    shade: 'light',
+                    type: 'vertical',
+                    shadeIntensity: 1,
+                    colorStops: [
+                        [],
+                        [],
+                        [
+                            { offset: 0,   color: '#20c997', opacity: 0.5  },
+                            { offset: 100, color: '#20c997', opacity: 0.05 }
+                        ]
+                    ]
+                }
+            },
+            xaxis: {
+                type: 'datetime',
+                labels: {
+                    datetimeUTC: false,
+                    formatter: function(val) {
+                        const d = new Date(val);
+                        const h = d.getHours().toString().padStart(2, '0');
+                        const m = d.getMinutes().toString().padStart(2, '0');
+                        // Marcar cambio de día
+                        if (h === '00' && m === '00') {
+                            return `${d.getDate()} ${meses[d.getMonth()]}`;
+                        }
+                        return `${h}:${m}`;
+                    }
+                },
+                tickAmount: 12
+            },
+            yaxis: buildYAxis(compScale0, caudalScale0),
+            tooltip: {
+                shared: true,
+                custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                    const row = historico[dataPointIndex];
+                    if (!row) return '';
+
+                    const fecha    = new Date(row.fecha);
+                    const fechaFmt = `${fecha.getDate().toString().padStart(2,'0')} ${meses[fecha.getMonth()]} `
+                                + `${fecha.getHours().toString().padStart(2,'0')}:${fecha.getMinutes().toString().padStart(2,'0')}`;
+
+                    const fv = (val) => (val != null && !isNaN(val))
+                        ? parseFloat(val).toFixed(2) : '--';
+
+                    return `
+                        <div style="padding:10px;border-radius:5px;background:#fff;border:1px solid #ccc;font-size:13px;line-height:1.6;">
+                            <div style="font-weight:bold;margin-bottom:5px;border-bottom:1px solid #eee;">${fechaFmt}</div>
+                            <div><span style="color:#ff6b35;">●</span> <b>Apert. Comp. 1:</b> ${fv(row.real_comp1)} cm</div>
+                            <div><span style="color:#764ba2;">●</span> <b>Apert. Comp. 2:</b> ${fv(row.real_comp2)} cm</div>
+                            <div><span style="color:#20c997;">●</span> <b>Q. al río:</b> ${fv(row.real_caudal)} m³/s</div>
+                        </div>
+                    `;
+                }
+            },
+            noData: { text: 'Sin datos disponibles' }
         };
 
-        const container = document.querySelector("#chart-compuerta-fondo");
+        const container = document.querySelector('#chart-compuerta-fondo');
         if (container) {
-            container.innerHTML = "";
+            container.innerHTML = '';
             new ApexCharts(container, options).render();
+        }
+
+        /* --- helper buildYAxis --- */
+        function buildYAxis(cs, qs) {
+            return [
+                {
+                    seriesName: 'Comp. Fondo 1 (%)',
+                    title: { text: 'Apertura (cm)' },
+                    min: 0,
+                    max: cs.max,
+                    tickAmount: cs.tickAmount,
+                    labels: { formatter: val => val != null ? val.toFixed(0) : '' }
+                },
+                {
+                    seriesName: 'Comp. Fondo 2 (%)',
+                    show: false
+                },
+                {
+                    seriesName: 'Q. al río (m³/s)',
+                    opposite: true,
+                    title: { text: 'Caudal (m³/s)' },
+                    min: 0,
+                    max: qs.max,
+                    tickAmount: qs.tickAmount,
+                    labels: { formatter: val => val != null ? val.toFixed(0) : '' }
+                }
+            ];
         }
     }
 

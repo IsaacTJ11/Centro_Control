@@ -231,21 +231,54 @@ class PresaHuincoReader:
             return None
 
     def get_historico_compuerta_fondo(self):
-        """Obtiene el histórico de apertura/caudal de la compuerta de fondo del día actual"""
         try:
             with self.get_connection() as conn:
-                hoy = datetime.now().date()
-                manana = hoy + timedelta(days=1)
                 query = """
-                    SELECT fecha, apertura, caudal, nivel_embalse
-                    FROM public.compuerta_fondo_huinco
-                    WHERE fecha >= %s AND fecha < %s
+                    SELECT fecha, caudal_descarga, comp_fondo_1, comp_fondo_2
+                    FROM public.presa_huinco
+                    WHERE caudal_descarga IS NOT NULL
                     ORDER BY fecha ASC
                 """
-                df = pd.read_sql_query(query, conn, params=[hoy, manana])
+                df = pd.read_sql_query(query, conn)
                 df = df.replace({np.nan: None})
                 df['fecha'] = df['fecha'].dt.strftime('%Y-%m-%dT%H:%M:%S')
-                return df.to_dict(orient='records')
+
+                records = df.to_dict(orient='records')
+
+                UMBRAL = 2.0  # mitad del umbral anterior (era 4.0)
+
+                suavizados = []
+                ultimo_caudal = None
+                ultimo_comp1  = None
+                ultimo_comp2  = None
+
+                for row in records:
+                    caudal = row['caudal_descarga']
+                    comp1  = row['comp_fondo_1']
+                    comp2  = row['comp_fondo_2']
+
+                    if ultimo_caudal is None:
+                        ultimo_caudal = caudal
+                        ultimo_comp1  = comp1
+                        ultimo_comp2  = comp2
+                    else:
+                        diferencia = abs((caudal or 0) - (ultimo_caudal or 0))
+                        if diferencia >= UMBRAL:
+                            ultimo_caudal = caudal
+                            ultimo_comp1  = comp1
+                            ultimo_comp2  = comp2
+
+                    suavizados.append({
+                        'fecha':           row['fecha'],
+                        'caudal_descarga': caudal,        # valor real siempre
+                        'comp_fondo_1':    ultimo_comp1,  # suavizado
+                        'comp_fondo_2':    ultimo_comp2,  # suavizado
+                        'real_comp1':      comp1,
+                        'real_comp2':      comp2,
+                        'real_caudal':     caudal,
+                    })
+
+                return suavizados
         except Exception as e:
             print(f"Error get_historico_compuerta_fondo: {e}")
             return []

@@ -156,14 +156,14 @@ function renderizarDashboard(actual, resultado) {
                 punto.label = {
                     borderColor: '#5AFA93',
                     offsetY: p.position === 'bottom' ? 40 : -5,
-                    offsetX: p.position === 'bottom' ? -20 : 20,
+                    offsetX: p.position === 'bottom' ? -15 : 15,
                     style: {
                         color: '#fff',
                         background: '#5AFA93',
                         fontSize: '10px',
                         padding: { left: 4, right: 4, top: 2, bottom: 2 }
                     },
-                    text: `Qrío: ${p.caudal}`,
+                    text: `Q.río: ${p.caudal}`,
                     textAnchor: p.position === 'bottom' ? 'start' : 'end'
                 };
             }

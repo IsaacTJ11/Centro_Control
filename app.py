@@ -473,12 +473,12 @@ def guardar_config_compuertas():
 def get_data_fondo_huinco():
     try:
         reader = PresaHuincoReader()
-        actual = reader.get_valores_actuales_compuerta_fondo()
+        actual    = reader.get_valores_actuales_compuerta_fondo()
         historico = reader.get_historico_compuerta_fondo()
 
         return jsonify({
-            'status': 'success',
-            'actual': actual,
+            'status':  'success',
+            'actual':  actual,
             'grafico': historico
         })
     except Exception as e:
