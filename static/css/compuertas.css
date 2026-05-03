@@ -104,6 +104,39 @@
     min-height: 350px;
 }
 
+/* ============================================================
+   4. HEADER
+   ============================================================ */
+
+   /* ----------------------------
+   4.1 Botón de configuración de compuertas
+   ---------------------------- */
+
+.edit-tipo-select-inline {
+    padding: 5px 8px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 12px;
+    background: #f8f9fa;
+    cursor: pointer;
+    min-width: 130px;
+}
+
+.edit-tipo-select-inline:focus {
+    outline: none;
+    border-color: #ff6b35;
+}
+
+#btn-config-compuertas {
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#btn-config-compuertas:hover {
+    transform: rotate(45deg);
+}
 
 /* ============================================================
    4. TABLA DE MOVIMIENTOS RECIENTES

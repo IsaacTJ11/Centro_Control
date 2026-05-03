@@ -457,8 +457,10 @@ def guardar_config_compuertas():
         data = request.get_json()
         filepath = os.path.join('templates', 'config_compuertas_data.json')
         config_data = {
-            'compuerta1': data['compuerta1'],
-            'compuerta2': data['compuerta2'],
+            'compuerta1':   data['compuerta1'],
+            'compuerta2':   data['compuerta2'],
+            'nivel0_comp1': data.get('nivel0_comp1', -8),
+            'nivel0_comp2': data.get('nivel0_comp2', -8),
             'ultima_actualizacion': data['timestamp']
         }
         with open(filepath, 'w', encoding='utf-8') as f:
