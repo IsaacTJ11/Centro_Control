@@ -270,9 +270,9 @@ class PresaHuincoReader:
 
                     suavizados.append({
                         'fecha':           row['fecha'],
-                        'caudal_descarga': caudal,        # valor real siempre
-                        'comp_fondo_1':    ultimo_comp1,  # suavizado
-                        'comp_fondo_2':    ultimo_comp2,  # suavizado
+                        'caudal_descarga': ultimo_caudal,  # suavizado (antes era caudal)
+                        'comp_fondo_1':    ultimo_comp1,
+                        'comp_fondo_2':    ultimo_comp2,
                         'real_comp1':      comp1,
                         'real_comp2':      comp2,
                         'real_caudal':     caudal,

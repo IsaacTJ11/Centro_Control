@@ -151,7 +151,7 @@ window.initCompuertas = function () {
             colors: ['#ff6b35', '#764ba2', '#20c997'],
             dataLabels: { enabled: false },
             stroke: {
-                curve: 'stepline',
+                curve: ['stepline', 'stepline', 'smooth'],
                 width: [2, 2, 2]
             },
             fill: {
@@ -172,20 +172,21 @@ window.initCompuertas = function () {
             },
             xaxis: {
                 type: 'datetime',
+                min: xMin,
+                max: xMax,
                 labels: {
                     datetimeUTC: false,
                     formatter: function(val) {
                         const d = new Date(val);
                         const h = d.getHours().toString().padStart(2, '0');
                         const m = d.getMinutes().toString().padStart(2, '0');
-                        // Marcar cambio de día
                         if (h === '00' && m === '00') {
                             return `${d.getDate()} ${meses[d.getMonth()]}`;
                         }
                         return `${h}:${m}`;
                     }
                 },
-                tickAmount: 12
+                tickAmount: Math.round((xMax - xMin) / (30 * 60 * 1000))
             },
             yaxis: buildYAxis(compScale0, caudalScale0),
             tooltip: {
