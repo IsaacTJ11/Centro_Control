@@ -37,10 +37,13 @@ window.initCompuertas = function () {
 
         /* 2.2 Series */
         const ahora = Date.now();
-        const hoy00 = new Date();
-        hoy00.setHours(0, 0, 0, 0);
-        const xMin = hoy00.getTime();
-        const xMax = (() => { const d = new Date(); const m = d.getMinutes() < 30 ? 0 : 30; d.setMinutes(m, 0, 0); return d.getTime(); })();
+        const xMax = (() => {
+            const d = new Date();
+            const m = d.getMinutes() < 30 ? 0 : 30;
+            d.setMinutes(m, 0, 0);
+            return d.getTime();
+        })();
+        const xMin = xMax - 6 * 60 * 60 * 1000;
 
         const serieComp1 = historico.map(d => ({
             x: new Date(d.fecha).getTime(),
@@ -127,8 +130,39 @@ window.initCompuertas = function () {
                             yaxis: buildYAxis(csNew, qsNew)
                         }, false, false);
                     },
-                    beforeResetZoom: function() {
-                        return { xaxis: {} };  // ApexCharts restaura el zoom original
+                    beforeResetZoom: function(chartCtx) {
+                        const xMaxReset = (() => {
+                            const d = new Date();
+                            const m = d.getMinutes() < 30 ? 0 : 30;
+                            d.setMinutes(m, 0, 0);
+                            return d.getTime();
+                        })();
+                        const xMinReset = xMaxReset - 6 * 60 * 60 * 1000;
+
+                        // Recalcular escalas Y con datos visibles en ventana default
+                        const visible = historico.filter(d => {
+                            const t = new Date(d.fecha).getTime();
+                            return t >= xMinReset && t <= xMaxReset;
+                        });
+                        const visComp = visible.flatMap(d => [
+                            d.comp_fondo_1 != null ? parseFloat(d.comp_fondo_1) : null,
+                            d.comp_fondo_2 != null ? parseFloat(d.comp_fondo_2) : null
+                        ]).filter(v => v != null);
+                        const visCaudal = visible
+                            .map(d => d.caudal_descarga != null ? parseFloat(d.caudal_descarga) : null)
+                            .filter(v => v != null);
+
+                        const maxC  = visComp.length   ? Math.max(...visComp)   : maxComp0;
+                        const maxQ  = visCaudal.length ? Math.max(...visCaudal) : maxCaudal0;
+                        const minC  = visComp.length   ? Math.floor(Math.min(...visComp) / 5) * 5 : minComp0;
+                        const csNew = calcCompScale(maxC, minC);
+                        const qsNew = calcCaudalScale(maxQ, csNew.max);
+
+                        setTimeout(() => {
+                            chartCtx.updateOptions({ yaxis: buildYAxis(csNew, qsNew) }, false, false);
+                        }, 50);
+
+                        return { xaxis: { min: xMinReset, max: xMaxReset } };
                     },
                     scrolled: function(chartCtx, { xaxis }) {
                         // mismo recálculo al hacer scroll
@@ -216,9 +250,9 @@ window.initCompuertas = function () {
                     return `
                         <div style="padding:10px;border-radius:5px;background:#fff;border:1px solid #ccc;font-size:13px;line-height:1.6;">
                             <div style="font-weight:bold;margin-bottom:5px;border-bottom:1px solid #eee;">${fechaFmt}</div>
+                            <div><span style="color:#20c997;">●</span> <b>Q. al río:</b> ${fv(row.real_caudal)} m³/s</div>
                             <div><span style="color:#ff6b35;">●</span> <b>Apert. Comp. 1:</b> ${fv(row.real_comp1)} cm</div>
                             <div><span style="color:#764ba2;">●</span> <b>Apert. Comp. 2:</b> ${fv(row.real_comp2)} cm</div>
-                            <div><span style="color:#20c997;">●</span> <b>Q. al río:</b> ${fv(row.real_caudal)} m³/s</div>
                         </div>
                     `;
                 }
@@ -241,10 +275,13 @@ window.initCompuertas = function () {
                     min: cs.min,
                     max: cs.max,
                     tickAmount: cs.tickAmount,
+                    forceNiceScale: false,
                     labels: { formatter: val => val != null ? val.toFixed(0) : '' }
                 },
                 {
                     seriesName: 'Comp. Fondo 2 (%)',
+                    min: cs.min,
+                    max: cs.max,
                     show: false
                 },
                 {
@@ -254,6 +291,7 @@ window.initCompuertas = function () {
                     min: 0,
                     max: qs.max,
                     tickAmount: qs.tickAmount,
+                    forceNiceScale: false,
                     labels: { formatter: val => val != null ? val.toFixed(0) : '' }
                 }
             ];

@@ -251,8 +251,8 @@ class PresaHuincoReader:
                 ultimo_caudal = None
                 ultimo_comp1  = None
                 ultimo_comp2  = None
-
-                for row in records:
+                
+                for i, row in enumerate(records):
                     caudal = row['caudal_descarga']
                     comp1  = row['comp_fondo_1']
                     comp2  = row['comp_fondo_2']
@@ -268,9 +268,12 @@ class PresaHuincoReader:
                             ultimo_comp1  = comp1
                             ultimo_comp2  = comp2
 
+                    # Caudal graficado: usar el valor del registro ANTERIOR (desplaza 30 min al futuro)
+                    caudal_graficado = records[i - 1]['caudal_descarga'] if i > 0 else caudal
+
                     suavizados.append({
                         'fecha':           row['fecha'],
-                        'caudal_descarga': ultimo_caudal,  # suavizado (antes era caudal)
+                        'caudal_descarga': caudal_graficado,
                         'comp_fondo_1':    ultimo_comp1,
                         'comp_fondo_2':    ultimo_comp2,
                         'real_comp1':      comp1,
