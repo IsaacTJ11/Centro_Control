@@ -36,6 +36,12 @@ window.initCompuertas = function () {
         }
 
         /* 2.2 Series */
+        const ahora = Date.now();
+        const hoy00 = new Date();
+        hoy00.setHours(0, 0, 0, 0);
+        const xMin = hoy00.getTime();
+        const xMax = (() => { const d = new Date(); const m = d.getMinutes() < 30 ? 0 : 30; d.setMinutes(m, 0, 0); return d.getTime(); })();
+
         const serieComp1 = historico.map(d => ({
             x: new Date(d.fecha).getTime(),
             y: d.comp_fondo_1 != null ? parseFloat(d.comp_fondo_1) : null
@@ -58,10 +64,11 @@ window.initCompuertas = function () {
             .map(d => d.caudal_descarga != null ? parseFloat(d.caudal_descarga) : null)
             .filter(v => v != null);
 
-        function calcCompScale(maxVal) {
+        // Reemplazar calcCompScale:
+        function calcCompScale(maxVal, minVal) {
             const yMax  = maxVal > 0 ? maxVal * 2 : 10;
             const step  = yMax <= 30 ? 5 : 10;
-            return { min: 0, max: Math.ceil(yMax / step) * step, tickAmount: Math.ceil(yMax / step) };
+            return { min: minVal, max: Math.ceil(yMax / step) * step, tickAmount: Math.ceil((Math.ceil(yMax / step) * step - minVal) / step) };
         }
         function calcCaudalScale(maxVal, compYMax) {
             const yMax  = maxVal > 0 ? Math.ceil(maxVal / 5) * 5 + 5 : 10;
@@ -71,7 +78,9 @@ window.initCompuertas = function () {
 
         const maxComp0   = allComp.length   ? Math.max(...allComp)   : 0;
         const maxCaudal0 = allCaudal.length ? Math.max(...allCaudal) : 0;
-        const compScale0   = calcCompScale(maxComp0);
+        const minComp0 = allComp.length ? Math.floor(Math.min(...allComp) / 5) * 5 : 0;
+        const yMinComp = Math.floor(minComp0 / 5) * 5;
+        const compScale0 = calcCompScale(maxComp0, minComp0);
         const caudalScale0 = calcCaudalScale(maxCaudal0, compScale0.max);
 
         /* 2.4 Formateo eje X — igual que embalse_huinco */
@@ -110,7 +119,8 @@ window.initCompuertas = function () {
 
                         const maxC  = visComp.length   ? Math.max(...visComp)   : maxComp0;
                         const maxQ  = visCaudal.length ? Math.max(...visCaudal) : maxCaudal0;
-                        const csNew = calcCompScale(maxC);
+                        const minC  = visComp.length ? Math.floor(Math.min(...visComp) / 5) * 5 : minComp0;
+                        const csNew = calcCompScale(maxC, minC);
                         const qsNew = calcCaudalScale(maxQ, csNew.max);
 
                         chartCtx.updateOptions({
@@ -139,7 +149,8 @@ window.initCompuertas = function () {
 
                         const maxC  = visComp.length   ? Math.max(...visComp)   : maxComp0;
                         const maxQ  = visCaudal.length ? Math.max(...visCaudal) : maxCaudal0;
-                        const csNew = calcCompScale(maxC);
+                        const minC  = visComp.length ? Math.floor(Math.min(...visComp) / 5) * 5 : yMinComp;
+                        const csNew = calcCompScale(maxC, minC);
                         const qsNew = calcCaudalScale(maxQ, csNew.max);
 
                         chartCtx.updateOptions({
@@ -186,7 +197,7 @@ window.initCompuertas = function () {
                         return `${h}:${m}`;
                     }
                 },
-                tickAmount: Math.round((xMax - xMin) / (30 * 60 * 1000))
+                tickAmount: Math.round((xMax - xMin) / (2 * 60 * 60 * 1000))
             },
             yaxis: buildYAxis(compScale0, caudalScale0),
             tooltip: {
@@ -227,7 +238,7 @@ window.initCompuertas = function () {
                 {
                     seriesName: 'Comp. Fondo 1 (%)',
                     title: { text: 'Apertura (cm)' },
-                    min: 0,
+                    min: cs.min,
                     max: cs.max,
                     tickAmount: cs.tickAmount,
                     labels: { formatter: val => val != null ? val.toFixed(0) : '' }
